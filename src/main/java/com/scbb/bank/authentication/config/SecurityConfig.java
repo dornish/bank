@@ -17,18 +17,20 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.header.writers.StaticHeadersWriter;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    UserService userService;
+    private final JwtAuthenticationEntryPoint unauthorizedHandler;
+    private UserService userService;
 
     @Autowired
-    private JwtAuthenticationEntryPoint unauthorizedHandler;
+    public SecurityConfig(UserService userService, JwtAuthenticationEntryPoint unauthorizedHandler) {
+        this.userService = userService;
+        this.unauthorizedHandler = unauthorizedHandler;
+    }
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {

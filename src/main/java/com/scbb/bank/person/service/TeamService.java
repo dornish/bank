@@ -1,18 +1,13 @@
 package com.scbb.bank.person.service;
 
-import com.scbb.bank.person.repository.MemberRepository;
-import com.scbb.bank.person.repository.SocietyRepository;
-import com.scbb.bank.person.repository.TeamRepository;
-import com.scbb.bank.person.model.Member;
 import com.scbb.bank.person.model.Team;
+import com.scbb.bank.person.repository.TeamRepository;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class TeamService implements AbstractService<Team, Integer> {

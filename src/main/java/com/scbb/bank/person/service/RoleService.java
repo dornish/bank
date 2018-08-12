@@ -1,7 +1,7 @@
 package com.scbb.bank.person.service;
 
-import com.scbb.bank.person.repository.RoleRepository;
 import com.scbb.bank.person.model.Role;
+import com.scbb.bank.person.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

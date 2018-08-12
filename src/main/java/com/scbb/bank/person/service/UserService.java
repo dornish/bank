@@ -1,11 +1,10 @@
 package com.scbb.bank.person.service;
 
+import com.scbb.bank.person.model.User;
 import com.scbb.bank.person.repository.BoardMemberRepository;
 import com.scbb.bank.person.repository.RoleRepository;
 import com.scbb.bank.person.repository.StaffRepository;
 import com.scbb.bank.person.repository.UserRepository;
-import com.scbb.bank.person.model.Role;
-import com.scbb.bank.person.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -17,8 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService, AbstractService<User, Integer> {

@@ -4,10 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.scbb.bank.meeting.model.Attendance;
 import com.scbb.bank.person.model.enums.BoardDesignation;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;

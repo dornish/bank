@@ -1,6 +1,5 @@
 package com.scbb.bank.account.model;
 
-import com.scbb.bank.account.model.enums.EntryType;
 import com.scbb.bank.account.model.enums.OperationType;
 import lombok.Data;
 

@@ -1,12 +1,11 @@
 package com.scbb.bank.authentication.controller;
 
-import com.scbb.bank.person.model.Role;
-import com.scbb.bank.person.model.User;
 import com.scbb.bank.authentication.payload.ApiResponse;
 import com.scbb.bank.authentication.payload.JwtAuthenticationResponse;
+import com.scbb.bank.authentication.security.JwtTokenProvider;
+import com.scbb.bank.person.model.User;
 import com.scbb.bank.person.repository.RoleRepository;
 import com.scbb.bank.person.repository.UserRepository;
-import com.scbb.bank.authentication.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +16,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.net.URI;
-import java.util.HashSet;
-import java.util.stream.Collectors;
 
 @CrossOrigin
 @RequestMapping("/auth")
@@ -99,7 +94,7 @@ public class AuthenticationController {
 
     @GetMapping("/user")
     public ResponseEntity<User> getUserByToken(@RequestHeader("Authorization") String token) {
-        Integer userId = tokenProvider.getUserIdFromToken(token.substring(7, token.length()));
+        Integer userId = tokenProvider.getUserIdFromToken(token.substring(7));
         User user = userRepository.getOne(userId);
         return ResponseEntity.ok(user);
     }

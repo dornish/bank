@@ -2,7 +2,6 @@ package com.scbb.bank.person.model;
 
 import com.scbb.bank.person.model.enums.Gender;
 import com.scbb.bank.person.model.enums.IncomeType;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

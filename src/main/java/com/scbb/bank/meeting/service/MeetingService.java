@@ -1,10 +1,7 @@
 package com.scbb.bank.meeting.service;
 
 import com.scbb.bank.meeting.model.Meeting;
-import com.scbb.bank.meeting.repository.AttendanceRepository;
 import com.scbb.bank.meeting.repository.MeetingRepository;
-import com.scbb.bank.person.model.BoardMember;
-import com.scbb.bank.person.repository.BoardMemberRepository;
 import com.scbb.bank.person.service.AbstractService;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;

@@ -1,11 +1,8 @@
 package com.scbb.bank.person.service;
 
-import com.scbb.bank.person.model.Subsidy;
-import com.scbb.bank.person.repository.BoardMemberRepository;
-import com.scbb.bank.person.repository.MemberRepository;
-import com.scbb.bank.person.repository.SubsidyRepository;
-import com.scbb.bank.person.repository.TeamRepository;
 import com.scbb.bank.person.model.Member;
+import com.scbb.bank.person.model.Subsidy;
+import com.scbb.bank.person.repository.MemberRepository;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
