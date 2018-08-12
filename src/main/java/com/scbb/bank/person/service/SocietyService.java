@@ -1,19 +1,13 @@
 package com.scbb.bank.person.service;
 
-import com.scbb.bank.person.repository.DivisionRepository;
-import com.scbb.bank.person.repository.SocietyRepository;
-import com.scbb.bank.person.repository.TeamRepository;
-import com.scbb.bank.person.model.Division;
 import com.scbb.bank.person.model.Society;
-import com.scbb.bank.person.model.Team;
+import com.scbb.bank.person.repository.SocietyRepository;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class SocietyService implements AbstractService<Society, Integer> {
@@ -41,6 +35,7 @@ public class SocietyService implements AbstractService<Society, Integer> {
 
     @Override
     public void delete(Integer id) {
+        System.out.println(id);
         Society society = societyRepository.getOne(id);
         if (!society.getTeamList().isEmpty())
             society.getTeamList().forEach(team -> team.setSociety(null));
