@@ -22,15 +22,21 @@ public class Account {
     private LocalDateTime lastUpdatedDateTime;
 
     @Enumerated(EnumType.STRING)
-    private OperationType accountType;
+    private OperationType operationType;
+
+    @ManyToOne
+    private AccountType accountType;
+
+    @ManyToOne
+    private SubAccountType subAccountType;
 
     public void credit(Float amount) {
-        setBalance(accountType == OperationType.Credit ? getBalance() + amount : getBalance() - amount);
+        setBalance(operationType == OperationType.Credit ? getBalance() + amount : getBalance() - amount);
         setLastUpdatedDateTime(LocalDateTime.now());
     }
 
     public void debit(Float amount) {
-        setBalance(accountType == OperationType.Debit ? getBalance() + amount : getBalance() - amount);
+        setBalance(operationType == OperationType.Debit ? getBalance() + amount : getBalance() - amount);
         setLastUpdatedDateTime(LocalDateTime.now());
     }
 

@@ -1,9 +1,6 @@
 package com.scbb.bank.person.service;
 
 import com.scbb.bank.person.model.User;
-import com.scbb.bank.person.repository.BoardMemberRepository;
-import com.scbb.bank.person.repository.RoleRepository;
-import com.scbb.bank.person.repository.StaffRepository;
 import com.scbb.bank.person.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -21,18 +18,11 @@ import java.util.List;
 public class UserService implements UserDetailsService, AbstractService<User, Integer> {
 
     private UserRepository userRepository;
-    private StaffRepository staffRepository;
-    private RoleRepository roleRepository;
-    private BoardMemberRepository boardMemberRepository;
     private PasswordEncoder passwordEncoder;
 
-
     @Autowired
-    public UserService(UserRepository userRepository, StaffRepository staffRepository, RoleRepository roleRepository, BoardMemberRepository boardMemberRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.staffRepository = staffRepository;
-        this.roleRepository = roleRepository;
-        this.boardMemberRepository = boardMemberRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
