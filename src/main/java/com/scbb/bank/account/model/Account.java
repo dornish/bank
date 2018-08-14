@@ -15,6 +15,8 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private String number;
+
     private String name;
     private Float balance;
 

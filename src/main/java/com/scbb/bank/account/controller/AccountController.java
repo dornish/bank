@@ -41,8 +41,8 @@ public class AccountController implements AbstractController<Account, Integer> {
         return ResponseEntity.ok().build();
     }
 
-    @Override
-    public ResponseEntity<List<Account>> search(Account account) {
+    @PutMapping("search")
+    public ResponseEntity<List<Account>> search(@RequestBody Account account) {
         return null;
     }
 

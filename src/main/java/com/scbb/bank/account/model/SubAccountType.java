@@ -14,6 +14,8 @@ public class SubAccountType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private String number;
+
     private String name;
 
     @ManyToOne
