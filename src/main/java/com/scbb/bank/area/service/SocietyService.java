@@ -1,8 +1,8 @@
-package com.scbb.bank.person.service;
+package com.scbb.bank.area.service;
 
+import com.scbb.bank.area.model.Society;
+import com.scbb.bank.area.repository.SocietyRepository;
 import com.scbb.bank.interfaces.AbstractService;
-import com.scbb.bank.person.model.Society;
-import com.scbb.bank.person.repository.SocietyRepository;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
@@ -35,13 +35,14 @@ public class SocietyService implements AbstractService<Society, Integer> {
     }
 
     @Override
-    public void delete(Integer id) {
+    public boolean delete(Integer id) {
         System.out.println(id);
         Society society = societyRepository.getOne(id);
         if (!society.getTeamList().isEmpty())
             society.getTeamList().forEach(team -> team.setSociety(null));
         societyRepository.delete(society);
 
+        return false;
     }
 
     @Transactional

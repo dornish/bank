@@ -70,8 +70,9 @@ public class UserService implements UserDetailsService, AbstractService<User, In
     }
 
     @Transactional
-    public void delete(Integer id) {
+    public boolean delete(Integer id) {
         userRepository.deleteById(id);
+        return false;
     }
 
     @Transactional

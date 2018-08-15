@@ -1,15 +1,14 @@
-package com.scbb.bank.person.model;
+package com.scbb.bank.area.model;
 
 import lombok.Data;
 
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 @Data
 @Entity
-public class Team {
+public class Society {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,23 +16,24 @@ public class Team {
 
     private String name;
 
-    @OneToMany(mappedBy = "team")
-    private Set<Member> memberSet = new HashSet<>();
+    @OneToMany(mappedBy = "society")
+    private Set<Team> teamList = new HashSet<>();
 
     @ManyToOne
-    private Society society;
+    private Division division;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Team)) return false;
-        Team team = (Team) o;
-        return Objects.equals(id, team.id);
+        if (!(o instanceof Society)) return false;
+
+        Society society = (Society) o;
+
+        return id != null ? id.equals(society.id) : society.id == null;
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(id);
+        return id != null ? id.hashCode() : 0;
     }
 }

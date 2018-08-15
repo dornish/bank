@@ -1,5 +1,7 @@
-package com.scbb.bank.person.model;
+package com.scbb.bank.area.model;
 
+import com.scbb.bank.person.model.BoardMember;
+import com.scbb.bank.person.model.Staff;
 import lombok.Data;
 
 import javax.persistence.*;

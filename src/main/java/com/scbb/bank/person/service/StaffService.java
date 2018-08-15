@@ -40,13 +40,14 @@ public class StaffService implements AbstractService<Staff, Integer> {
     }
 
     @Transactional
-    public void delete(Integer id) {
+    public boolean delete(Integer id) {
         Staff staff = staffRepository.getOne(id);
         if (staff.getUser() != null)
             staff.getUser().setStaff(null);
         if (staff.getDivision() != null)
             staff.getDivision().setStaff(null);
         staffRepository.delete(staff);
+        return false;
     }
 
     @Transactional

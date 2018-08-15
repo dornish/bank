@@ -1,9 +1,9 @@
-package com.scbb.bank.person.controller;
+package com.scbb.bank.area.controller;
 
+import com.scbb.bank.area.model.Division;
+import com.scbb.bank.area.service.DivisionService;
 import com.scbb.bank.interfaces.AbstractController;
-import com.scbb.bank.person.model.Division;
 import com.scbb.bank.person.model.Member;
-import com.scbb.bank.person.service.DivisionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,6 +1,7 @@
 package com.scbb.bank.person.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.scbb.bank.area.model.Division;
 import com.scbb.bank.meeting.model.Attendance;
 import com.scbb.bank.person.model.enums.BoardDesignation;
 import lombok.Data;

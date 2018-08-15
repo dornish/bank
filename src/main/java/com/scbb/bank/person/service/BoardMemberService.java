@@ -41,7 +41,7 @@ public class BoardMemberService implements AbstractService<BoardMember, Integer>
 
     @Transactional
     @Override
-    public void delete(Integer id) {
+    public boolean delete(Integer id) {
         BoardMember boardMember = boardMemberRepository.getOne(id);
         if (boardMember.getUser() != null)
             boardMember.getUser().setBoardMember(null);
@@ -51,6 +51,7 @@ public class BoardMemberService implements AbstractService<BoardMember, Integer>
             boardMember.getAttendanceList().forEach(attendance -> attendance.setBoardMember(null));
         boardMemberRepository.delete(boardMember);
 
+        return false;
     }
 
     @Override

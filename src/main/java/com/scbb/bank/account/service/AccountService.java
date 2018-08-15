@@ -41,8 +41,13 @@ public class AccountService implements AbstractService<Account, Integer> {
     }
 
     @Transactional
-    public void delete(Integer id) {
-        accountRepository.deleteById(id);
+    public boolean delete(Integer id) {
+        Account account = accountRepository.getOne(id);
+        if (account.getBalance() == 0F) {
+            accountRepository.delete(account);
+            return true;
+        }
+        return false;
     }
 
     @Transactional

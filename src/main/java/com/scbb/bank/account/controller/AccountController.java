@@ -3,6 +3,7 @@ package com.scbb.bank.account.controller;
 import com.scbb.bank.account.model.Account;
 import com.scbb.bank.account.service.AccountService;
 import com.scbb.bank.interfaces.AbstractController;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,8 +38,9 @@ public class AccountController implements AbstractController<Account, Integer> {
 
     @DeleteMapping("{id}")
     public ResponseEntity delete(@PathVariable Integer id) {
-        accountService.delete(id);
-        return ResponseEntity.ok().build();
+        if (accountService.delete(id))
+            return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(false);
     }
 
     @PutMapping("search")

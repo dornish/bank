@@ -1,5 +1,6 @@
 package com.scbb.bank.person.model;
 
+import com.scbb.bank.area.model.Team;
 import com.scbb.bank.person.model.enums.Gender;
 import com.scbb.bank.person.model.enums.IncomeType;
 import lombok.Data;

@@ -1,8 +1,8 @@
-package com.scbb.bank.person.service;
+package com.scbb.bank.area.service;
 
+import com.scbb.bank.area.model.Team;
+import com.scbb.bank.area.repository.TeamRepository;
 import com.scbb.bank.interfaces.AbstractService;
-import com.scbb.bank.person.model.Team;
-import com.scbb.bank.person.repository.TeamRepository;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
@@ -36,11 +36,12 @@ public class TeamService implements AbstractService<Team, Integer> {
     }
 
     @Transactional
-    public void delete(Integer id) {
+    public boolean delete(Integer id) {
         Team team = teamRepository.getOne(id);
         if (!team.getMemberSet().isEmpty())
             team.getMemberSet().forEach(member -> member.setTeam(null));
         teamRepository.delete(team);
+        return false;
     }
 
 

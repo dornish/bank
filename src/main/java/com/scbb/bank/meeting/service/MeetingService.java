@@ -1,8 +1,8 @@
 package com.scbb.bank.meeting.service;
 
+import com.scbb.bank.interfaces.AbstractService;
 import com.scbb.bank.meeting.model.Meeting;
 import com.scbb.bank.meeting.repository.MeetingRepository;
-import com.scbb.bank.interfaces.AbstractService;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
@@ -35,13 +35,14 @@ public class MeetingService implements AbstractService<Meeting, Integer> {
     }
 
     @Transactional
-    public void delete(Integer id) {
+    public boolean delete(Integer id) {
         Meeting meeting = meetingRepository.getOne(id);
         meeting.getAttendanceList().forEach(attendance -> {
             attendance.setMeeting(null);
             attendance.setBoardMember(null);
         });
         meetingRepository.delete(meeting);
+        return false;
     }
 
     @Transactional

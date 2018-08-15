@@ -1,8 +1,8 @@
-package com.scbb.bank.person.controller;
+package com.scbb.bank.area.controller;
 
+import com.scbb.bank.area.model.Team;
+import com.scbb.bank.area.service.TeamService;
 import com.scbb.bank.interfaces.AbstractController;
-import com.scbb.bank.person.model.Team;
-import com.scbb.bank.person.service.TeamService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

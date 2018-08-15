@@ -43,11 +43,12 @@ public class MemberService implements AbstractService<Member, Integer> {
 
     @Transactional
     @Override
-    public void delete(Integer id) {
+    public boolean delete(Integer id) {
         Member member = memberRepository.getOne(id);
         if (member.getBoardMember() != null)
             member.getBoardMember().setMember(null);
         memberRepository.delete(member);
+        return false;
     }
 
     @Override

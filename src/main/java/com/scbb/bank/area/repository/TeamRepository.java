@@ -1,6 +1,6 @@
-package com.scbb.bank.person.repository;
+package com.scbb.bank.area.repository;
 
-import com.scbb.bank.person.model.Team;
+import com.scbb.bank.area.model.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

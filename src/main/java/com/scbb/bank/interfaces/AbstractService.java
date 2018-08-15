@@ -10,7 +10,7 @@ public interface AbstractService<E, I> {
 
     E persist(E e);
 
-    void delete(I id);
+    boolean delete(I id);
 
     List<E> search(E e);
 

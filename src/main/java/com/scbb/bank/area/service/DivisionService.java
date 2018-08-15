@@ -1,8 +1,8 @@
-package com.scbb.bank.person.service;
+package com.scbb.bank.area.service;
 
+import com.scbb.bank.area.model.Division;
+import com.scbb.bank.area.repository.DivisionRepository;
 import com.scbb.bank.interfaces.AbstractService;
-import com.scbb.bank.person.model.Division;
-import com.scbb.bank.person.repository.DivisionRepository;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
@@ -37,11 +37,12 @@ public class DivisionService implements AbstractService<Division, Integer> {
 
     @Transactional
     @Override
-    public void delete(Integer id) {
+    public boolean delete(Integer id) {
         Division division = divisionRepository.getOne(id);
         if (!division.getSocietyList().isEmpty())
             division.getSocietyList().forEach(society -> society.setDivision(null));
         divisionRepository.delete(division);
+        return false;
     }
 
     @Transactional

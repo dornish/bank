@@ -1,5 +1,6 @@
 package com.scbb.bank.person.model;
 
+import com.scbb.bank.area.model.Division;
 import com.scbb.bank.person.model.enums.Designation;
 import com.scbb.bank.person.model.enums.Gender;
 import lombok.Data;
