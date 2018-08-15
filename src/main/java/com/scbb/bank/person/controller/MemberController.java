@@ -1,5 +1,6 @@
 package com.scbb.bank.person.controller;
 
+import com.scbb.bank.interfaces.AbstractController;
 import com.scbb.bank.person.model.Member;
 import com.scbb.bank.person.service.MemberService;
 import org.springframework.http.ResponseEntity;
@@ -20,19 +21,19 @@ public class MemberController implements AbstractController<Member, Integer> {
     }
 
     @GetMapping
-    public ResponseEntity<List<Member>> findAll() {
-        return ResponseEntity.ok(modifyResources(memberService.findAll()));
+    public List<Member> findAll() {
+        return modifyResources(memberService.findAll());
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Member> findById(@PathVariable Integer id) {
-        return ResponseEntity.ok(modifyResource(memberService.findById(id)));
+    public Member findById(@PathVariable Integer id) {
+        return modifyResource(memberService.findById(id));
     }
 
     @PostMapping
     @PutMapping
-    public ResponseEntity<Member> persist(@RequestBody Member member) {
-        return ResponseEntity.ok(modifyResource(memberService.persist(member)));
+    public Member persist(@RequestBody Member member) {
+        return modifyResource(memberService.persist(member));
     }
 
     @DeleteMapping("{id}")
@@ -43,8 +44,8 @@ public class MemberController implements AbstractController<Member, Integer> {
 
     @Override
     @PutMapping("search")
-    public ResponseEntity<List<Member>> search(@RequestBody Member member) {
-        return ResponseEntity.ok(modifyResources(memberService.search(member)));
+    public List<Member> search(@RequestBody Member member) {
+        return modifyResources(memberService.search(member));
     }
 
     public Member modifyResource(Member member) {

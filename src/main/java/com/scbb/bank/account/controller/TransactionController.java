@@ -2,7 +2,7 @@ package com.scbb.bank.account.controller;
 
 import com.scbb.bank.account.model.Transaction;
 import com.scbb.bank.account.service.TransactionService;
-import com.scbb.bank.person.controller.AbstractController;
+import com.scbb.bank.interfaces.AbstractController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,18 +21,18 @@ public class TransactionController implements AbstractController<Transaction, In
     }
 
     @GetMapping
-    public ResponseEntity<List<Transaction>> findAll() {
-        return ResponseEntity.ok(modifyResources(transactionService.findAll()));
+    public List<Transaction> findAll() {
+        return modifyResources(transactionService.findAll());
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Transaction> findById(@PathVariable Integer id) {
+    public Transaction findById(@PathVariable Integer id) {
         return null;
     }
 
     @PostMapping
-    public ResponseEntity<Transaction> persist(@RequestBody Transaction transaction) {
-        return ResponseEntity.ok(modifyResource(transactionService.recordTransaction(transaction)));
+    public Transaction persist(@RequestBody Transaction transaction) {
+        return modifyResource(transactionService.recordTransaction(transaction));
     }
 
     @Override
@@ -41,7 +41,7 @@ public class TransactionController implements AbstractController<Transaction, In
     }
 
     @Override
-    public ResponseEntity<List<Transaction>> search(Transaction transaction) {
+    public List<Transaction> search(Transaction transaction) {
         return null;
     }
 

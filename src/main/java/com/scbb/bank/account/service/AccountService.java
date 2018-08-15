@@ -3,7 +3,7 @@ package com.scbb.bank.account.service;
 import com.scbb.bank.account.model.Account;
 import com.scbb.bank.account.repository.AccountRepository;
 import com.scbb.bank.account.repository.SubAccountTypeRepository;
-import com.scbb.bank.person.service.AbstractService;
+import com.scbb.bank.interfaces.AbstractService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

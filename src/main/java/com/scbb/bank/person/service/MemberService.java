@@ -1,5 +1,6 @@
 package com.scbb.bank.person.service;
 
+import com.scbb.bank.interfaces.AbstractService;
 import com.scbb.bank.person.model.Member;
 import com.scbb.bank.person.model.Subsidy;
 import com.scbb.bank.person.repository.MemberRepository;

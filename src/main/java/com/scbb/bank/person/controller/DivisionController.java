@@ -1,5 +1,6 @@
 package com.scbb.bank.person.controller;
 
+import com.scbb.bank.interfaces.AbstractController;
 import com.scbb.bank.person.model.Division;
 import com.scbb.bank.person.model.Member;
 import com.scbb.bank.person.service.DivisionService;
@@ -21,19 +22,19 @@ public class DivisionController implements AbstractController<Division, Integer>
     }
 
     @GetMapping
-    public ResponseEntity<List<Division>> findAll() {
-        return ResponseEntity.ok(modifyResources(divisionService.findAll()));
+    public List<Division> findAll() {
+        return modifyResources(divisionService.findAll());
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Division> findById(@PathVariable Integer id) {
-        return ResponseEntity.ok(modifyResource(divisionService.findById(id)));
+    public Division findById(@PathVariable Integer id) {
+        return modifyResource(divisionService.findById(id));
     }
 
     @PostMapping
     @PutMapping
-    public ResponseEntity<Division> persist(@RequestBody Division division) {
-        return ResponseEntity.ok(modifyResource(divisionService.persist(division)));
+    public Division persist(@RequestBody Division division) {
+        return modifyResource(divisionService.persist(division));
     }
 
     @DeleteMapping("{id}")
@@ -43,8 +44,8 @@ public class DivisionController implements AbstractController<Division, Integer>
     }
 
     @PutMapping("/search")
-    public ResponseEntity<List<Division>> search(@RequestBody Division division) {
-        return ResponseEntity.ok(modifyResources(divisionService.search(division)));
+    public List<Division> search(@RequestBody Division division) {
+        return modifyResources(divisionService.search(division));
     }
 
 

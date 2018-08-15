@@ -1,5 +1,6 @@
 package com.scbb.bank.person.controller;
 
+import com.scbb.bank.interfaces.AbstractController;
 import com.scbb.bank.person.model.Society;
 import com.scbb.bank.person.service.SocietyService;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +21,8 @@ public class SocietyController implements AbstractController<Society, Integer> {
     }
 
     @GetMapping
-    public ResponseEntity<List<Society>> findAll() {
-        return ResponseEntity.ok(modifyResources(societyService.findAll()));
+    public List<Society> findAll() {
+        return modifyResources(societyService.findAll());
     }
 
     @GetMapping("division/{id}")
@@ -30,14 +31,14 @@ public class SocietyController implements AbstractController<Society, Integer> {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Society> findById(@PathVariable Integer id) {
-        return ResponseEntity.ok(modifyResource(societyService.findById(id)));
+    public Society findById(@PathVariable Integer id) {
+        return modifyResource(societyService.findById(id));
     }
 
     @PostMapping
     @PutMapping
-    public ResponseEntity<Society> persist(@RequestBody Society society) {
-        return ResponseEntity.ok(modifyResource(societyService.persist(society)));
+    public Society persist(@RequestBody Society society) {
+        return modifyResource(societyService.persist(society));
     }
 
     @DeleteMapping("{id}")
@@ -47,8 +48,8 @@ public class SocietyController implements AbstractController<Society, Integer> {
     }
 
     @PutMapping("/search")
-    public ResponseEntity<List<Society>> search(@RequestBody Society society){
-        return ResponseEntity.ok(modifyResources(societyService.search(society)));
+    public List<Society> search(@RequestBody Society society) {
+        return modifyResources(societyService.search(society));
     }
 
     public Society modifyResource(Society society) {

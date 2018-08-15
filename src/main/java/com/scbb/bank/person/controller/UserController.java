@@ -1,5 +1,6 @@
 package com.scbb.bank.person.controller;
 
+import com.scbb.bank.interfaces.AbstractController;
 import com.scbb.bank.person.model.User;
 import com.scbb.bank.person.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,29 +23,29 @@ public class UserController implements AbstractController<User, Integer> {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> findAll() {
-        return ResponseEntity.ok(modifyResources(userService.findAll()));
+    public List<User> findAll() {
+        return modifyResources(userService.findAll());
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<User> findById(@PathVariable Integer id) {
-        return ResponseEntity.ok(modifyResource(userService.findById(id)));
+    public User findById(@PathVariable Integer id) {
+        return modifyResource(userService.findById(id));
     }
 
     @GetMapping("/staff")
-    public ResponseEntity<List<User>> findAllByHavingStaff() {
-        return ResponseEntity.ok(modifyResources(userService.findAllByHavingStaff()));
+    public List<User> findAllByHavingStaff() {
+        return modifyResources(userService.findAllByHavingStaff());
     }
 
     @GetMapping("/boardMember")
-    public ResponseEntity<List<User>> findAllByHavingBoardMember() {
-        return ResponseEntity.ok(modifyResources(userService.findAllByHavingBoardMember()));
+    public List<User> findAllByHavingBoardMember() {
+        return modifyResources(userService.findAllByHavingBoardMember());
     }
 
     @PostMapping
     @PutMapping
-    public ResponseEntity<User> persist(@RequestBody User user) {
-        return ResponseEntity.ok(modifyResource(userService.persist(user)));
+    public User persist(@RequestBody User user) {
+        return modifyResource(userService.persist(user));
     }
 
     @DeleteMapping("{id}")
@@ -54,8 +55,8 @@ public class UserController implements AbstractController<User, Integer> {
     }
 
     @PutMapping("/search")
-    public ResponseEntity<List<User>> search(@RequestBody User user) {
-        return ResponseEntity.ok(modifyResources(userService.search(user)));
+    public List<User> search(@RequestBody User user) {
+        return modifyResources(userService.search(user));
     }
 
     public User modifyResource(User user) {

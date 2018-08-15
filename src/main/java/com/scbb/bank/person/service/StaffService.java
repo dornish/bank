@@ -1,5 +1,6 @@
 package com.scbb.bank.person.service;
 
+import com.scbb.bank.interfaces.AbstractService;
 import com.scbb.bank.person.model.Staff;
 import com.scbb.bank.person.repository.StaffRepository;
 import org.springframework.data.domain.Example;

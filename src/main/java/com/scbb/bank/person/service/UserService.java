@@ -1,5 +1,6 @@
 package com.scbb.bank.person.service;
 
+import com.scbb.bank.interfaces.AbstractService;
 import com.scbb.bank.person.model.User;
 import com.scbb.bank.person.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

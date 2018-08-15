@@ -1,4 +1,4 @@
-package com.scbb.bank.person.service;
+package com.scbb.bank.interfaces;
 
 import java.util.List;
 

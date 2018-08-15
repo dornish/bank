@@ -1,4 +1,4 @@
-package com.scbb.bank.person.controller;
+package com.scbb.bank.interfaces;
 
 import org.springframework.http.ResponseEntity;
 
@@ -6,15 +6,15 @@ import java.util.List;
 
 public interface AbstractController<E, I> {
 
-    ResponseEntity<List<E>> findAll();
+    List<E> findAll();
 
-    ResponseEntity<E> findById(I id);
+    E findById(I id);
 
-    ResponseEntity<E> persist(E e);
+    E persist(E e);
 
     ResponseEntity delete(I id);
 
-    ResponseEntity<List<E>> search(E e);
+    List<E> search(E e);
 
     E modifyResource(E e);
 

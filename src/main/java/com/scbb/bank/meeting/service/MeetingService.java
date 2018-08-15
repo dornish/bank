@@ -2,7 +2,7 @@ package com.scbb.bank.meeting.service;
 
 import com.scbb.bank.meeting.model.Meeting;
 import com.scbb.bank.meeting.repository.MeetingRepository;
-import com.scbb.bank.person.service.AbstractService;
+import com.scbb.bank.interfaces.AbstractService;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;

@@ -2,7 +2,7 @@ package com.scbb.bank.account.controller;
 
 import com.scbb.bank.account.model.Account;
 import com.scbb.bank.account.service.AccountService;
-import com.scbb.bank.person.controller.AbstractController;
+import com.scbb.bank.interfaces.AbstractController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,18 +21,18 @@ public class AccountController implements AbstractController<Account, Integer> {
     }
 
     @GetMapping
-    public ResponseEntity<List<Account>> findAll() {
-        return ResponseEntity.ok(modifyResources(accountService.findAll()));
+    public List<Account> findAll() {
+        return modifyResources(accountService.findAll());
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Account> findById(@PathVariable Integer id) {
-        return ResponseEntity.ok(modifyResource(accountService.findById(id)));
+    public Account findById(@PathVariable Integer id) {
+        return modifyResource(accountService.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Account> persist(@RequestBody Account account) {
-        return ResponseEntity.ok(modifyResource(accountService.persist(account)));
+    public Account persist(@RequestBody Account account) {
+        return modifyResource(accountService.persist(account));
     }
 
     @DeleteMapping("{id}")
@@ -42,7 +42,7 @@ public class AccountController implements AbstractController<Account, Integer> {
     }
 
     @PutMapping("search")
-    public ResponseEntity<List<Account>> search(@RequestBody Account account) {
+    public List<Account> search(@RequestBody Account account) {
         return null;
     }
 

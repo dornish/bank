@@ -1,5 +1,6 @@
 package com.scbb.bank.person.controller;
 
+import com.scbb.bank.interfaces.AbstractController;
 import com.scbb.bank.person.model.BoardMember;
 import com.scbb.bank.person.service.BoardMemberService;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +21,8 @@ public class BoardMemberController implements AbstractController<BoardMember, In
     }
 
     @GetMapping
-    public ResponseEntity<List<BoardMember>> findAll() {
-        return ResponseEntity.ok(modifyResources(boardMemberService.findAll()));
+    public List<BoardMember> findAll() {
+        return modifyResources(boardMemberService.findAll());
     }
 
     @GetMapping("/divisionIsNull")
@@ -30,14 +31,14 @@ public class BoardMemberController implements AbstractController<BoardMember, In
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<BoardMember> findById(@PathVariable Integer id) {
-        return ResponseEntity.ok(modifyResource(boardMemberService.findById(id)));
+    public BoardMember findById(@PathVariable Integer id) {
+        return modifyResource(boardMemberService.findById(id));
     }
 
     @PostMapping
     @PutMapping
-    public ResponseEntity<BoardMember> persist(@RequestBody BoardMember boardMember) {
-        return ResponseEntity.ok(modifyResource(boardMemberService.persist(boardMember)));
+    public BoardMember persist(@RequestBody BoardMember boardMember) {
+        return modifyResource(boardMemberService.persist(boardMember));
     }
 
     @DeleteMapping
@@ -47,7 +48,7 @@ public class BoardMemberController implements AbstractController<BoardMember, In
     }
 
     @Override
-    public ResponseEntity<List<BoardMember>> search(BoardMember boardMember) {
+    public List<BoardMember> search(BoardMember boardMember) {
         return null;
     }
 

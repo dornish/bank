@@ -1,5 +1,6 @@
 package com.scbb.bank.person.controller;
 
+import com.scbb.bank.interfaces.AbstractController;
 import com.scbb.bank.person.model.Team;
 import com.scbb.bank.person.service.TeamService;
 import org.springframework.http.ResponseEntity;
@@ -21,24 +22,24 @@ public class TeamController implements AbstractController<Team, Integer> {
 
 
     @GetMapping
-    public ResponseEntity<List<Team>> findAll() {
-        return ResponseEntity.ok(modifyResources(teamService.findAll()));
+    public List<Team> findAll() {
+        return modifyResources(teamService.findAll());
     }
 
     @GetMapping("society/{id}")
-    public ResponseEntity<List<Team>> findAllBySocietyId(@PathVariable Integer id) {
-        return ResponseEntity.ok(modifyResources(teamService.findAllBySocietyId(id)));
+    public List<Team> findAllBySocietyId(@PathVariable Integer id) {
+        return modifyResources(teamService.findAllBySocietyId(id));
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Team> findById(@PathVariable Integer id) {
-        return ResponseEntity.ok(modifyResource(teamService.findById(id)));
+    public Team findById(@PathVariable Integer id) {
+        return modifyResource(teamService.findById(id));
     }
 
     @PostMapping
     @PutMapping
-    public ResponseEntity<Team> persist(@RequestBody Team team) {
-        return ResponseEntity.ok(modifyResource(teamService.persist(team)));
+    public Team persist(@RequestBody Team team) {
+        return modifyResource(teamService.persist(team));
     }
 
 
@@ -49,8 +50,8 @@ public class TeamController implements AbstractController<Team, Integer> {
     }
 
     @PutMapping("search")
-    public ResponseEntity<List<Team>> search(@RequestBody Team team){
-        return ResponseEntity.ok(modifyResources(teamService.search(team)));
+    public List<Team> search(@RequestBody Team team) {
+        return modifyResources(teamService.search(team));
     }
 
     public Team modifyResource(Team team) {

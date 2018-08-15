@@ -2,7 +2,7 @@ package com.scbb.bank.meeting.controller;
 
 import com.scbb.bank.meeting.model.Meeting;
 import com.scbb.bank.meeting.service.MeetingService;
-import com.scbb.bank.person.controller.AbstractController;
+import com.scbb.bank.interfaces.AbstractController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,19 +21,19 @@ public class MeetingController implements AbstractController<Meeting, Integer> {
     }
 
     @GetMapping
-    public ResponseEntity<List<Meeting>> findAll() {
-        return ResponseEntity.ok(modifyResources(meetingService.findAll()));
+    public List<Meeting> findAll() {
+        return modifyResources(meetingService.findAll());
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Meeting> findById(@PathVariable Integer id) {
-        return ResponseEntity.ok(modifyResource(meetingService.findById(id)));
+    public Meeting findById(@PathVariable Integer id) {
+        return modifyResource(meetingService.findById(id));
     }
 
     @PostMapping
     @PutMapping
-    public ResponseEntity<Meeting> persist(@RequestBody Meeting meeting) {
-        return ResponseEntity.ok(modifyResource(meetingService.persist(meeting)));
+    public Meeting persist(@RequestBody Meeting meeting) {
+        return modifyResource(meetingService.persist(meeting));
     }
 
     @DeleteMapping("{id}")
@@ -43,8 +43,8 @@ public class MeetingController implements AbstractController<Meeting, Integer> {
     }
 
     @PutMapping("search")
-    public ResponseEntity<List<Meeting>> search(@RequestBody Meeting meeting) {
-        return ResponseEntity.ok(modifyResources(meetingService.search(meeting)));
+    public List<Meeting> search(@RequestBody Meeting meeting) {
+        return modifyResources(meetingService.search(meeting));
     }
 
     @Override

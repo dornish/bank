@@ -1,5 +1,6 @@
 package com.scbb.bank.person.controller;
 
+import com.scbb.bank.interfaces.AbstractController;
 import com.scbb.bank.person.model.Role;
 import com.scbb.bank.person.service.RoleService;
 import org.springframework.http.ResponseEntity;
@@ -19,19 +20,19 @@ public class RoleController implements AbstractController<Role, Integer> {
     }
 
     @GetMapping
-    public ResponseEntity<List<Role>> findAll() {
-        return ResponseEntity.ok(modifyResources(roleService.findAll()));
+    public List<Role> findAll() {
+        return modifyResources(roleService.findAll());
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Role> findById(@PathVariable Integer id) {
-        return ResponseEntity.ok(modifyResource(roleService.findById(id)));
+    public Role findById(@PathVariable Integer id) {
+        return modifyResource(roleService.findById(id));
     }
 
     @PostMapping
     @PutMapping
-    public ResponseEntity<Role> persist(@RequestBody Role staff) {
-        return ResponseEntity.ok(modifyResource(roleService.persist(staff)));
+    public Role persist(@RequestBody Role staff) {
+        return modifyResource(roleService.persist(staff));
     }
 
     @DeleteMapping("{id}")
@@ -41,7 +42,7 @@ public class RoleController implements AbstractController<Role, Integer> {
     }
 
     @Override
-    public ResponseEntity<List<Role>> search(Role role) {
+    public List<Role> search(Role role) {
         return null;
     }
 
