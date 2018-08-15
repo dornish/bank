@@ -49,7 +49,7 @@ public class DivisionController implements AbstractController<Division, Integer>
     }
 
 
-    public Division  modifyResource(Division division) {
+    public Division modifyResource(Division division) {
         if (!division.getSocietyList().isEmpty())
             division.getSocietyList().forEach(society -> {
                 society.setDivision(null);

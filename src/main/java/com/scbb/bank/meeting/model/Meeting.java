@@ -8,8 +8,8 @@ import lombok.Data;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -32,7 +32,7 @@ public class Meeting {
     private LocalTime time;
 
     @OneToMany(mappedBy = "meeting", orphanRemoval = true)
-    private Set<Attendance> attendanceList = new HashSet<>();
+    private List<Attendance> attendanceList = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

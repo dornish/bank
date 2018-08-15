@@ -3,7 +3,8 @@ package com.scbb.bank.account.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -16,8 +17,8 @@ public class AccountType {
     private String name;
 
     @OneToMany(mappedBy = "accountType")
-    private Set<Account> accountSet;
+    private List<Account> accountList = new ArrayList<>();
 
     @OneToMany(mappedBy = "accountType")
-    private Set<SubAccountType> subAccountTypeSet;
+    private List<SubAccountType> subAccountTypeList = new ArrayList<>();
 }

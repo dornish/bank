@@ -85,7 +85,8 @@ public class AuthenticationController {
                 }
             }
 
-        } else
+        }
+        else
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
                     ApiResponse.create(false, "Username is incorrect")
             );

@@ -1,8 +1,8 @@
 package com.scbb.bank.meeting.controller;
 
+import com.scbb.bank.interfaces.AbstractController;
 import com.scbb.bank.meeting.model.Attendance;
 import com.scbb.bank.meeting.service.AttendanceService;
-import com.scbb.bank.interfaces.AbstractController;
 import com.scbb.bank.person.model.Member;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

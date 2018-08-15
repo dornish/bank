@@ -5,8 +5,8 @@ import com.scbb.bank.person.model.Staff;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -19,7 +19,7 @@ public class Division {
     private String name;
 
     @OneToMany(mappedBy = "division")
-    private Set<Society> societyList = new HashSet<>();
+    private List<Society> societyList = new ArrayList<>();
 
     @OneToOne
     private Staff staff;

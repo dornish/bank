@@ -70,7 +70,7 @@ public class BoardMemberController implements AbstractController<BoardMember, In
             boardMember.getDivision().setSocietyList(null);
         }
         if (!boardMember.getAttendanceList().isEmpty()) {
-            boardMember.getAttendanceList().forEach(attendance ->{
+            boardMember.getAttendanceList().forEach(attendance -> {
                 attendance.setBoardMember(null);
                 attendance.setMeeting(null);
                 attendance.setMeeting(null);

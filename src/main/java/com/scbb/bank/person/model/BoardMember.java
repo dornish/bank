@@ -8,9 +8,9 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Data
@@ -37,7 +37,7 @@ public class BoardMember {
 
 
     @OneToMany(mappedBy = "boardMember")
-    private Set<Attendance> attendanceList = new HashSet<>();
+    private List<Attendance> attendanceList = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

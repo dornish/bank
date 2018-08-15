@@ -10,7 +10,7 @@ public class LocalTimeAttributeConverter implements AttributeConverter<LocalTime
 
     @Override
     public Time convertToDatabaseColumn(LocalTime time) {
-        return time == null ? null  : Time.valueOf(time);
+        return time == null ? null : Time.valueOf(time);
     }
 
     @Override

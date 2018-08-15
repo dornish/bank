@@ -3,8 +3,8 @@ package com.scbb.bank.area.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -17,7 +17,7 @@ public class Society {
     private String name;
 
     @OneToMany(mappedBy = "society")
-    private Set<Team> teamList = new HashSet<>();
+    private List<Team> teamList = new ArrayList<>();
 
     @ManyToOne
     private Division division;

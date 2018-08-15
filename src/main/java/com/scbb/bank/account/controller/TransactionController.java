@@ -48,7 +48,7 @@ public class TransactionController implements AbstractController<Transaction, In
     @Override
     public Transaction modifyResource(Transaction transaction) {
         if (!transaction.getEntryList().isEmpty()) {
-            transaction.getEntryList().forEach(entry ->{
+            transaction.getEntryList().forEach(entry -> {
                 entry.setTransaction(null);
                 entry.setAccount(null);
             });
