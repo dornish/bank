@@ -1,8 +1,8 @@
-package com.scbb.bank.account.controller;
+package com.scbb.bank.ledger.controller;
 
-import com.scbb.bank.account.model.Account;
-import com.scbb.bank.account.service.AccountService;
 import com.scbb.bank.interfaces.AbstractController;
+import com.scbb.bank.ledger.model.Account;
+import com.scbb.bank.ledger.service.AccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +32,7 @@ public class AccountController implements AbstractController<Account, Integer> {
     }
 
     @PostMapping
+    @PutMapping
     public Account persist(@RequestBody Account account) {
         return modifyResource(accountService.persist(account));
     }

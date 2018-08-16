@@ -38,8 +38,8 @@ public class TeamService implements AbstractService<Team, Integer> {
     @Transactional
     public boolean delete(Integer id) {
         Team team = teamRepository.getOne(id);
-        if (!team.getMemberSet().isEmpty())
-            team.getMemberSet().forEach(member -> member.setTeam(null));
+        if (!team.getMemberList().isEmpty())
+            team.getMemberList().forEach(member -> member.setTeam(null));
         teamRepository.delete(team);
         return false;
     }

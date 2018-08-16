@@ -50,7 +50,7 @@ public class MemberController implements AbstractController<Member, Integer> {
 
     public Member modifyResource(Member member) {
         if (member.getTeam() != null) {
-            member.getTeam().setMemberSet(null);
+            member.getTeam().setMemberList(null);
             member.getTeam().setSociety(null);
         }
         if (member.getBoardMember() != null) {

@@ -1,11 +1,11 @@
-package com.scbb.bank.account.service;
+package com.scbb.bank.ledger.service;
 
 
-import com.scbb.bank.account.model.Account;
-import com.scbb.bank.account.model.Transaction;
-import com.scbb.bank.account.model.enums.OperationType;
-import com.scbb.bank.account.repository.AccountRepository;
-import com.scbb.bank.account.repository.TransactionRepository;
+import com.scbb.bank.ledger.model.Account;
+import com.scbb.bank.ledger.model.Transaction;
+import com.scbb.bank.ledger.model.enums.OperationType;
+import com.scbb.bank.ledger.repository.AccountRepository;
+import com.scbb.bank.ledger.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;

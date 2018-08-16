@@ -1,4 +1,4 @@
-package com.scbb.bank.account.model.enums;
+package com.scbb.bank.ledger.model.enums;
 
 public enum OperationType {
 

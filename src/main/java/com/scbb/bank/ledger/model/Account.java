@@ -1,7 +1,8 @@
-package com.scbb.bank.account.model;
+package com.scbb.bank.ledger.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.scbb.bank.account.model.enums.OperationType;
+import com.scbb.bank.area.model.Team;
+import com.scbb.bank.ledger.model.enums.OperationType;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -54,4 +55,7 @@ public class Account {
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
     }
+
+    @OneToOne(mappedBy = "account", cascade = CascadeType.MERGE)
+    private Team team;
 }

@@ -1,4 +1,4 @@
-package com.scbb.bank.account.controller;
+package com.scbb.bank.ledger.controller;
 
 
 import org.springframework.web.bind.annotation.CrossOrigin;

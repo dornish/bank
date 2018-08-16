@@ -1,6 +1,6 @@
-package com.scbb.bank.account.model;
+package com.scbb.bank.ledger.model;
 
-import com.scbb.bank.account.model.enums.OperationType;
+import com.scbb.bank.ledger.model.enums.OperationType;
 import lombok.Data;
 
 import javax.persistence.*;

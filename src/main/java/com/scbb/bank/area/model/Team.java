@@ -1,5 +1,6 @@
 package com.scbb.bank.area.model;
 
+import com.scbb.bank.ledger.model.Account;
 import com.scbb.bank.person.model.Member;
 import lombok.Data;
 
@@ -23,6 +24,9 @@ public class Team {
 
     @ManyToOne
     private Society society;
+
+    @OneToOne
+    private Account account;
 
     @Override
     public boolean equals(Object o) {

@@ -1,9 +1,10 @@
-package com.scbb.bank.account.service;
+package com.scbb.bank.ledger.service;
 
-import com.scbb.bank.account.model.Account;
-import com.scbb.bank.account.repository.AccountRepository;
-import com.scbb.bank.account.repository.SubAccountTypeRepository;
+import com.scbb.bank.area.repository.TeamRepository;
 import com.scbb.bank.interfaces.AbstractService;
+import com.scbb.bank.ledger.model.Account;
+import com.scbb.bank.ledger.repository.AccountRepository;
+import com.scbb.bank.ledger.repository.SubAccountTypeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,10 +16,13 @@ public class AccountService implements AbstractService<Account, Integer> {
     private AccountRepository accountRepository;
     private SubAccountTypeRepository subAccountTypeRepository;
 
+    private TeamRepository teamRepository;
 
-    public AccountService(AccountRepository accountRepository, SubAccountTypeRepository subAccountTypeRepository) {
+
+    public AccountService(AccountRepository accountRepository, SubAccountTypeRepository subAccountTypeRepository, TeamRepository teamRepository) {
         this.accountRepository = accountRepository;
         this.subAccountTypeRepository = subAccountTypeRepository;
+        this.teamRepository = teamRepository;
     }
 
     @Transactional
@@ -37,6 +41,8 @@ public class AccountService implements AbstractService<Account, Integer> {
             account.setBalance(0F);
             account.setNumber(calculateAccountNumber(account));
         }
+        if (account.getTeam() != null)
+            teamRepository.getOne(account.getTeam().getId()).setAccount(account);
         return accountRepository.save(account);
     }
 

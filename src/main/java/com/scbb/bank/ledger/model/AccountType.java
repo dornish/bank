@@ -1,4 +1,4 @@
-package com.scbb.bank.account.model;
+package com.scbb.bank.ledger.model;
 
 import lombok.Data;
 

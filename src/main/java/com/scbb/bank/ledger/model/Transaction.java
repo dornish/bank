@@ -1,7 +1,7 @@
-package com.scbb.bank.account.model;
+package com.scbb.bank.ledger.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.scbb.bank.account.model.enums.EntryType;
+import com.scbb.bank.ledger.model.enums.EntryType;
 import com.scbb.bank.person.model.User;
 import lombok.Data;
 

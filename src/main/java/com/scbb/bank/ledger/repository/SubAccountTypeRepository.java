@@ -1,6 +1,6 @@
-package com.scbb.bank.account.repository;
+package com.scbb.bank.ledger.repository;
 
-import com.scbb.bank.account.model.SubAccountType;
+import com.scbb.bank.ledger.model.SubAccountType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SubAccountTypeRepository extends JpaRepository<SubAccountType, Integer> {

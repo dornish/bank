@@ -56,7 +56,8 @@ public class SocietyController implements AbstractController<Society, Integer> {
         if (society.getTeamList() != null) {
             society.getTeamList().forEach(team -> {
                 team.setSociety(null);
-                team.setMemberSet(null);
+                team.setMemberList(null);
+                team.setAccount(null);
             });
         }
         if (society.getDivision() != null) {

@@ -59,11 +59,16 @@ public class TeamController implements AbstractController<Team, Integer> {
             team.getSociety().setTeamList(null);
             team.getSociety().setDivision(null);
         }
-        team.getMemberSet().forEach(member -> {
+        team.getMemberList().forEach(member -> {
             member.setTeam(null);
             member.setSubsidy(null);
             member.setBoardMember(null);
         });
+        if (team.getAccount() != null) {
+            team.getAccount().setSubAccountType(null);
+            team.getAccount().setTeam(null);
+            team.getAccount().setAccountType(null);
+        }
         return team;
     }
 

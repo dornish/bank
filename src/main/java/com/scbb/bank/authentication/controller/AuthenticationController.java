@@ -56,17 +56,17 @@ public class AuthenticationController {
                 // Check lock status
                 if (!existingUser.getAccountNonLocked())
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                            .body(ApiResponse.create(false, "Your account is Locked !!! Contact Manager for Unlock"));
+                            .body(ApiResponse.create(false, "Your ledger is Locked !!! Contact Manager for Unlock"));
 
                     //Check expiration status
                 else if (!existingUser.getCredentialsNonExpired())
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                            .body(ApiResponse.create(false, "Your account credentials is expired!!!"));
+                            .body(ApiResponse.create(false, "Your ledger credentials is expired!!!"));
 
                     //Check enable status
                 else if (!existingUser.getEnabled())
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                            .body(ApiResponse.create(false, "Your account is disabled!!!"));
+                            .body(ApiResponse.create(false, "Your ledger is disabled!!!"));
 
                 else {
 
@@ -142,7 +142,7 @@ public class AuthenticationController {
     public ResponseEntity<ApiResponse> lockAccount(@RequestBody User user) {
         userRepository.findByUsername(user.getUsername())
                 .ifPresent(user1 -> user1.setAccountNonLocked(true));
-        return ResponseEntity.ok(new ApiResponse(false, "Your account has been Locked !!! Contact Manager for Unlock"));
+        return ResponseEntity.ok(new ApiResponse(false, "Your ledger has been Locked !!! Contact Manager for Unlock"));
     }
 
 

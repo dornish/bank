@@ -1,8 +1,8 @@
-package com.scbb.bank.account.controller;
+package com.scbb.bank.ledger.controller;
 
-import com.scbb.bank.account.model.Transaction;
-import com.scbb.bank.account.service.TransactionService;
 import com.scbb.bank.interfaces.AbstractController;
+import com.scbb.bank.ledger.model.Transaction;
+import com.scbb.bank.ledger.service.TransactionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
