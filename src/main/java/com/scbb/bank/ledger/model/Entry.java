@@ -2,11 +2,14 @@ package com.scbb.bank.ledger.model;
 
 import com.scbb.bank.ledger.model.enums.OperationType;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Data
 @Entity
+@NoArgsConstructor
 public class Entry {
 
     @Id
@@ -16,13 +19,19 @@ public class Entry {
     @ManyToOne
     private Account account;
 
-    private Float amount;
+    private BigDecimal amount;
 
     @Enumerated(EnumType.STRING)
     private OperationType operationType;
 
     @ManyToOne
     private Transaction transaction;
+
+    public Entry(Account account, BigDecimal amount, Transaction transaction) {
+        this.account = account;
+        this.amount = amount;
+        this.transaction = transaction;
+    }
 
     @Override
     public boolean equals(Object o) {

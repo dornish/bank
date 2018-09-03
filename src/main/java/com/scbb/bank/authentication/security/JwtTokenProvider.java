@@ -4,6 +4,7 @@ import com.scbb.bank.person.model.User;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -31,10 +32,11 @@ public class JwtTokenProvider {
         HashMap<String, Object> claims = new HashMap<>();
         roles = "";
         authentication.getAuthorities().stream()
-                .map(o -> o.getAuthority())
+                .map(GrantedAuthority::getAuthority)
                 .forEach(s -> roles = roles + s + ",");
         claims.put("roles", roles.substring(0, roles.length() - 1));
         claims.put("username", userPrincipal.getUsername());
+        claims.put("id", userPrincipal.getId());
 
 
         return Jwts.builder()

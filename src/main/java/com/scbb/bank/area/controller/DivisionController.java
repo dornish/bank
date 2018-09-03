@@ -67,7 +67,6 @@ public class DivisionController implements AbstractController<Division, Integer>
         if (division.getStaff() != null) {
             division.getStaff().setDivision(null);
             division.getStaff().setUser(null);
-            division.getStaff().setUser(null);
         }
         return division;
     }

@@ -52,6 +52,7 @@ public class MemberController implements AbstractController<Member, Integer> {
         if (member.getTeam() != null) {
             member.getTeam().setMemberList(null);
             member.getTeam().setSociety(null);
+            member.getTeam().setAccount(null);
         }
         if (member.getBoardMember() != null) {
             member.getBoardMember().setDivision(null);
@@ -62,6 +63,14 @@ public class MemberController implements AbstractController<Member, Integer> {
 
         if (member.getSubsidy() != null) {
             member.getSubsidy().setMember(null);
+        }
+
+        if (member.getShareAccount() != null) {
+            member.getShareAccount().setTeam(null);
+            member.getShareAccount().setSubAccountType(null);
+            member.getShareAccount().setAccountType(null);
+            member.getShareAccount().setShareHolder(null);
+            member.getShareAccount().setSavings(null);
         }
         return member;
     }

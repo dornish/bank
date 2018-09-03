@@ -63,6 +63,8 @@ public class BoardMemberController implements AbstractController<BoardMember, In
             boardMember.getMember().setBoardMember(null);
             boardMember.getMember().setTeam(null);
             boardMember.getMember().setSubsidy(null);
+            boardMember.getMember().setShareAccount(null);
+            boardMember.getMember().setSavingsList(null);
         }
         if (boardMember.getDivision() != null) {
             boardMember.getDivision().setBoardMember(null);

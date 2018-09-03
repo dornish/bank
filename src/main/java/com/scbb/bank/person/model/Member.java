@@ -1,13 +1,16 @@
 package com.scbb.bank.person.model;
 
 import com.scbb.bank.area.model.Team;
+import com.scbb.bank.ledger.model.Account;
 import com.scbb.bank.person.model.enums.Gender;
 import com.scbb.bank.person.model.enums.IncomeType;
+import com.scbb.bank.savings.model.Savings;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @Data
@@ -35,11 +38,17 @@ public class Member {
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private Subsidy subsidy;
 
-    @OneToOne(mappedBy = "member") //Parent
+    @OneToOne(mappedBy = "member")
     private BoardMember boardMember;
 
     @ManyToOne
     private Team team;
+
+    @OneToOne
+    private Account shareAccount;
+
+    @OneToMany(mappedBy = "member")
+    private List<Savings> savingsList;
 
     public Member(String fullName) {
         this.fullName = fullName;

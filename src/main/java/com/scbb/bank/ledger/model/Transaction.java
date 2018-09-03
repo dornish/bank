@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.scbb.bank.ledger.model.enums.EntryType;
 import com.scbb.bank.person.model.User;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Data
 @Entity
+@NoArgsConstructor
 public class Transaction {
 
 
@@ -30,6 +32,12 @@ public class Transaction {
 
     @OneToMany(mappedBy = "transaction", cascade = CascadeType.PERSIST)
     private List<Entry> entryList = new ArrayList<>();
+
+    public Transaction(LocalDateTime dateTime, EntryType entryType, User user) {
+        this.dateTime = dateTime;
+        this.entryType = entryType;
+        this.user = user;
+    }
 
     @Override
     public boolean equals(Object o) {

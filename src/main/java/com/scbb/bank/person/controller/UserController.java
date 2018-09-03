@@ -1,6 +1,7 @@
 package com.scbb.bank.person.controller;
 
 import com.scbb.bank.interfaces.AbstractController;
+import com.scbb.bank.person.model.Member;
 import com.scbb.bank.person.model.User;
 import com.scbb.bank.person.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +68,11 @@ public class UserController implements AbstractController<User, Integer> {
         if (user.getBoardMember() != null) {
             user.getBoardMember().setUser(null);
             user.getBoardMember().setDivision(null);
+
+            String fullName = user.getBoardMember().getMember().getFullName();
             user.getBoardMember().setMember(null);
+            user.getBoardMember().setMember(new Member(fullName));
+
             user.getBoardMember().setAttendanceList(null);
         }
         return user;
