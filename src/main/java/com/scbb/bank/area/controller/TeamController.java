@@ -64,12 +64,15 @@ public class TeamController implements AbstractController<Team, Integer> {
             member.setSubsidy(null);
             member.setBoardMember(null);
             member.setShareAccount(null);
+            member.setSavingsList(null);
         });
         if (team.getAccount() != null) {
             team.getAccount().setSubAccountType(null);
             team.getAccount().setTeam(null);
             team.getAccount().setAccountType(null);
             team.getAccount().setShareHolder(null);
+            team.getAccount().setLoan(null);
+            team.getAccount().setSavings(null);
         }
         return team;
     }

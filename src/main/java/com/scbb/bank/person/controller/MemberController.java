@@ -25,6 +25,11 @@ public class MemberController implements AbstractController<Member, Integer> {
         return modifyResources(memberService.findAll());
     }
 
+    @GetMapping("teams/{id}")
+    public List<Member> findAllByTeamId(@PathVariable Integer id) {
+        return modifyResources(memberService.findAllByTeamId(id));
+    }
+
     @GetMapping("{id}")
     public Member findById(@PathVariable Integer id) {
         return modifyResource(memberService.findById(id));
@@ -71,6 +76,7 @@ public class MemberController implements AbstractController<Member, Integer> {
             member.getShareAccount().setAccountType(null);
             member.getShareAccount().setShareHolder(null);
             member.getShareAccount().setSavings(null);
+            member.getShareAccount().setLoan(null);
         }
         return member;
     }

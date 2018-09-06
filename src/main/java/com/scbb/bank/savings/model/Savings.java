@@ -2,7 +2,7 @@ package com.scbb.bank.savings.model;
 
 import com.scbb.bank.ledger.model.Account;
 import com.scbb.bank.person.model.Member;
-import com.scbb.bank.savings.model.enums.SavingsAccountStatus;
+import com.scbb.bank.savings.model.enums.SavingStatus;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,10 +19,10 @@ public class Savings {
     private LocalDate openedDate;
 
     @Enumerated(EnumType.STRING)
-    private SavingsAccountStatus savingsAccountStatus;
+    private SavingStatus savingStatus;
 
     @ManyToOne
-    private SavingsType savingType;
+    private SavingType savingType;
 
     @OneToOne
     private Account account;

@@ -26,6 +26,11 @@ public class MemberService implements AbstractService<Member, Integer> {
         return memberRepository.findAll();
     }
 
+    @Transactional
+    public List<Member> findAllByTeamId(Integer id) {
+        return memberRepository.findAllByTeamId(id);
+    }
+
     @Override
     public Member findById(Integer id) {
         return memberRepository.getOne(id);

@@ -55,6 +55,7 @@ public class SavingsController implements AbstractController<Savings, Integer> {
             savings.getAccount().setSubAccountType(null);
             savings.getAccount().setTeam(null);
             savings.getAccount().setSavings(null);
+            savings.getAccount().setLoan(null);
         }
         if (savings.getMember() != null) {
             savings.getMember().setShareAccount(null);

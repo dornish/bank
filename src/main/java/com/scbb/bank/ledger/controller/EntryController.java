@@ -60,6 +60,7 @@ public class EntryController implements AbstractController<Entry, Integer> {
             entry.getAccount().setAccountType(null);
             entry.getAccount().setShareHolder(null);
             entry.getAccount().setSavings(null);
+            entry.getAccount().setLoan(null);
         }
         if (entry.getTransaction() != null) {
             entry.getTransaction().setEntryList(null);

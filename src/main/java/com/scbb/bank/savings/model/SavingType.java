@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 @Data
 @Entity
-public class SavingsType {
+public class SavingType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,7 +15,7 @@ public class SavingsType {
 
     private String name;
 
-    @Column(precision = 4, scale = 2)
+    @Column(precision = 5, scale = 3)
     private BigDecimal interestRate;
 
 }

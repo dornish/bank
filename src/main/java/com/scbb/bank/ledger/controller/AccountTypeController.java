@@ -54,6 +54,7 @@ public class AccountTypeController implements AbstractController<AccountType, In
                 account.setSubAccountType(null);
                 account.setTeam(null);
                 account.setSavings(null);
+                account.setLoan(null);
             });
         }
         if (!accountType.getSubAccountTypeList().isEmpty()) {

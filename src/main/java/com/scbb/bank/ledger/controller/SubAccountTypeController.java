@@ -64,6 +64,7 @@ public class SubAccountTypeController implements AbstractController<SubAccountTy
                 account.setSubAccountType(null);
                 account.setTeam(null);
                 account.setSavings(null);
+                account.setLoan(null);
             });
         }
         return subAccountType;
