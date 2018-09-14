@@ -1,6 +1,7 @@
 package com.scbb.bank.ledger.service;
 
 
+import com.scbb.bank.authentication.security.JwtTokenProvider;
 import com.scbb.bank.ledger.model.Account;
 import com.scbb.bank.ledger.model.Entry;
 import com.scbb.bank.ledger.model.Transaction;
@@ -8,6 +9,7 @@ import com.scbb.bank.ledger.model.enums.EntryType;
 import com.scbb.bank.ledger.model.enums.OperationType;
 import com.scbb.bank.ledger.repository.AccountRepository;
 import com.scbb.bank.ledger.repository.TransactionRepository;
+import com.scbb.bank.person.model.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,10 +22,12 @@ public class TransactionService {
 
     private TransactionRepository transactionRepository;
     private AccountRepository accountRepository;
+    private JwtTokenProvider tokenProvider;
 
-    public TransactionService(TransactionRepository transactionRepository, AccountRepository accountRepository) {
+    public TransactionService(TransactionRepository transactionRepository, AccountRepository accountRepository, JwtTokenProvider tokenProvider) {
         this.transactionRepository = transactionRepository;
         this.accountRepository = accountRepository;
+        this.tokenProvider = tokenProvider;
     }
 
     public List<Transaction> findAll() {
@@ -47,9 +51,10 @@ public class TransactionService {
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public Transaction reverse(Integer id) {
+    public Transaction reverse(Integer id, String token) {
+        Integer userId = tokenProvider.getUserIdFromToken(token.substring(7));
         Transaction transaction = transactionRepository.getOne(id);
-        Transaction newTransaction = new Transaction(LocalDateTime.now(), EntryType.Adjusting_Entry, transaction.getUser());
+        Transaction newTransaction = new Transaction(LocalDateTime.now(), EntryType.Adjusting_Entry, new User(userId));
         transaction.getEntryList()
                 .forEach(entry -> {
                     Account account = accountRepository.getOne(entry.getAccount().getId());

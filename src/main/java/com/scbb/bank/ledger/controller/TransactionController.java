@@ -32,8 +32,8 @@ public class TransactionController implements AbstractController<Transaction, In
     }
 
     @GetMapping("reverse/{id}")
-    public Transaction reverse(@PathVariable Integer id) {
-        return modifyResource(transactionService.reverse(id));
+    public Transaction reverse(@PathVariable Integer id, @RequestHeader("Authorization") String token) {
+        return modifyResource(transactionService.reverse(id, token));
     }
 
     @GetMapping("entries/accounts/number/{number}")
@@ -58,7 +58,7 @@ public class TransactionController implements AbstractController<Transaction, In
 
     @Override
     public Transaction modifyResource(Transaction transaction) {
-        if (!transaction.getEntryList().isEmpty()) {
+        if (transaction.getEntryList() != null) {
             transaction.getEntryList().forEach(entry -> {
                 entry.setTransaction(null);
 

@@ -49,11 +49,12 @@ public class MeetingController implements AbstractController<Meeting, Integer> {
 
     @Override
     public Meeting modifyResource(Meeting meeting) {
-        meeting.getAttendanceList()
-                .forEach(attendance -> {
-                    attendance.setMeeting(null);
-                    attendance.setBoardMember(null);
-                });
+        if (meeting.getAttendanceList() != null)
+            meeting.getAttendanceList()
+                    .forEach(attendance -> {
+                        attendance.setMeeting(null);
+                        attendance.setBoardMember(null);
+                    });
         return meeting;
     }
 

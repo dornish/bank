@@ -2,12 +2,15 @@ package com.scbb.bank.loan.controller;
 
 import com.scbb.bank.interfaces.AbstractController;
 import com.scbb.bank.loan.model.Loan;
+import com.scbb.bank.loan.payload.InstallmentScheduleRequest;
+import com.scbb.bank.loan.payload.InstallmentScheduleResponse;
 import com.scbb.bank.loan.payload.LoanStatusRequest;
 import com.scbb.bank.loan.payload.LoanStatusResponse;
 import com.scbb.bank.loan.service.LoanService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,9 +35,19 @@ public class LoanController implements AbstractController<Loan, Integer> {
         return modifyResource(loanService.findById(id));
     }
 
+    @GetMapping("calcAmountToBePaid/{id}")
+    public BigDecimal calcAmountToBePaid(@PathVariable Integer id) {
+        return loanService.remainingInstallmentAmount(id);
+    }
+
     @PutMapping("calcInterestAndFine")
     public LoanStatusResponse calculateInterestAndFine(@RequestBody LoanStatusRequest loanStatusRequest) {
-        return loanService.calculateInterestAndFine(loanStatusRequest);
+        return loanService.calculateInterest(loanStatusRequest);
+    }
+
+    @PutMapping("calcSchedule")
+    public List<InstallmentScheduleResponse> calculateInstallmentSchedule(@RequestBody InstallmentScheduleRequest request) {
+        return loanService.calculateInstallmentSchedule(request);
     }
 
     @PutMapping("pay/{id}")

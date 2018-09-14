@@ -56,13 +56,6 @@ public class AccountService implements AbstractService<Account, Integer> {
             account.setNumber(accountRepository.getOne(account.getId()).getNumber());
             account.setBalance(accountRepository.getOne(account.getId()).getBalance());
         }
-
-        if (account.getTeam() != null)
-            teamRepository.getOne(account.getTeam().getId()).setAccount(account);
-
-        if (account.getShareHolder() != null)
-            memberRepository.getOne(account.getShareHolder().getId()).setShareAccount(account);
-
         return accountRepository.save(account);
     }
 

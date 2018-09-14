@@ -1,6 +1,7 @@
 package com.scbb.bank.savings.service;
 
 import com.scbb.bank.interfaces.AbstractService;
+import com.scbb.bank.ledger.service.AccountService;
 import com.scbb.bank.savings.model.Savings;
 import com.scbb.bank.savings.repository.SavingsRepository;
 import org.springframework.data.domain.Example;
@@ -14,9 +15,11 @@ import java.util.List;
 public class SavingsService implements AbstractService<Savings, Integer> {
 
     private SavingsRepository savingsRepository;
+    private AccountService accountService;
 
-    public SavingsService(SavingsRepository savingsRepository) {
+    public SavingsService(SavingsRepository savingsRepository, AccountService accountService) {
         this.savingsRepository = savingsRepository;
+        this.accountService = accountService;
     }
 
     @Transactional
@@ -31,6 +34,8 @@ public class SavingsService implements AbstractService<Savings, Integer> {
 
     @Transactional
     public Savings persist(Savings savings) {
+        if (savings.getId() == null)
+            accountService.persist(savings.getAccount());
         return savingsRepository.save(savings);
     }
 

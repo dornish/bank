@@ -3,6 +3,7 @@ package com.scbb.bank.area.service;
 import com.scbb.bank.area.model.Team;
 import com.scbb.bank.area.repository.TeamRepository;
 import com.scbb.bank.interfaces.AbstractService;
+import com.scbb.bank.ledger.service.AccountService;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
@@ -15,9 +16,11 @@ public class TeamService implements AbstractService<Team, Integer> {
 
 
     private TeamRepository teamRepository;
+    private AccountService accountService;
 
-    public TeamService(TeamRepository teamRepository) {
+    public TeamService(TeamRepository teamRepository, AccountService accountService) {
         this.teamRepository = teamRepository;
+        this.accountService = accountService;
     }
 
     @Transactional
@@ -32,6 +35,7 @@ public class TeamService implements AbstractService<Team, Integer> {
 
     @Transactional
     public Team persist(Team team) {
+        if (team.getId() == null) accountService.persist(team.getAccount());
         return teamRepository.save(team);
     }
 

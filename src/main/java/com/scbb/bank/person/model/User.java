@@ -35,6 +35,13 @@ public class User implements UserDetails {
             inverseJoinColumns = {@JoinColumn(name = "board_member_id")})
     private BoardMember boardMember;
 
+    public User() {
+    }
+
+    public User(Integer id) {
+        this.id = id;
+    }
+
     @Override
     public Collection<Role> getAuthorities() {
         return authorities;

@@ -78,7 +78,7 @@ public class MemberController implements AbstractController<Member, Integer> {
             member.getShareAccount().setSavings(null);
             member.getShareAccount().setLoan(null);
         }
-        if (!member.getSavingsList().isEmpty()) {
+        if (member.getSavingsList() != null) {
             member.getSavingsList().forEach(savings -> {
                 String fullName = savings.getMember().getFullName();
                 savings.setMember(null);

@@ -40,10 +40,34 @@ public class Account {
 
     @ManyToOne
     private SubAccountType subAccountType;
-    @OneToOne(mappedBy = "shareAccount", cascade = CascadeType.MERGE)
+
+    @OneToOne(mappedBy = "shareAccount")
     private Member shareHolder;
-    @OneToOne(mappedBy = "account", cascade = CascadeType.MERGE)
+
+    @OneToOne(mappedBy = "account")
     private Savings savings;
+
+    @OneToOne(mappedBy = "account")
+    private Team team;
+
+    @OneToOne(mappedBy = "account")
+    private Loan loan;
+
+    public void credit(BigDecimal amount) {
+        if (operationType == OperationType.Credit) setBalance(getBalance().add(amount));
+        else setBalance(getBalance().subtract(amount));
+        setLastUpdatedDateTime(LocalDateTime.now());
+    }
+
+    public void debit(BigDecimal amount) {
+        if (operationType == OperationType.Debit) setBalance(getBalance().add(amount));
+        else setBalance(getBalance().subtract(amount));
+        setLastUpdatedDateTime(LocalDateTime.now());
+    }
+
+    public Account(Integer id) {
+        this.id = id;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -56,26 +80,5 @@ public class Account {
     @Override
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
-    }
-
-    @OneToOne(mappedBy = "account", cascade = CascadeType.MERGE)
-    private Team team;
-    @OneToOne(mappedBy = "account", cascade = CascadeType.MERGE)
-    private Loan loan;
-
-    public Account(Integer id) {
-        this.id = id;
-    }
-
-    public void credit(BigDecimal amount) {
-        if (operationType == OperationType.Credit) setBalance(getBalance().add(amount));
-        else setBalance(getBalance().subtract(amount));
-        setLastUpdatedDateTime(LocalDateTime.now());
-    }
-
-    public void debit(BigDecimal amount) {
-        if (operationType == OperationType.Debit) setBalance(getBalance().add(amount));
-        else setBalance(getBalance().subtract(amount));
-        setLastUpdatedDateTime(LocalDateTime.now());
     }
 }

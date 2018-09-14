@@ -20,6 +20,9 @@ public class Loan {
     @Column(precision = 12, scale = 2)
     private BigDecimal requestedAmount;
 
+    @Column(precision = 12, scale = 2)
+    private BigDecimal equatedMonthlyValue;
+
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate requestedDate;
 
@@ -28,10 +31,7 @@ public class Loan {
 
     private Integer duration;
 
-    private Integer remainingInstallments;
-
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate nextInstallmentDate;
+    private Integer currentPeriod; // should be increased by 1 after ever period has passed
 
     private String remarks;
 

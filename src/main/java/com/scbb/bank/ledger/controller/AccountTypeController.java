@@ -47,7 +47,7 @@ public class AccountTypeController implements AbstractController<AccountType, In
 
     @Override
     public AccountType modifyResource(AccountType accountType) {
-        if (!accountType.getAccountList().isEmpty()) {
+        if (accountType.getAccountList() != null) {
             accountType.getAccountList().forEach(account -> {
                 account.setShareHolder(null);
                 account.setAccountType(null);
@@ -57,7 +57,7 @@ public class AccountTypeController implements AbstractController<AccountType, In
                 account.setLoan(null);
             });
         }
-        if (!accountType.getSubAccountTypeList().isEmpty()) {
+        if (accountType.getSubAccountTypeList() != null) {
             accountType.getSubAccountTypeList().forEach(subAccountType -> {
                 subAccountType.setAccountList(null);
                 subAccountType.setAccountType(null);

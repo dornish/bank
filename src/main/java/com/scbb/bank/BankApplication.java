@@ -7,15 +7,19 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.TimeZone;
 
 @SpringBootApplication
 @EnableJpaRepositories
 @EntityScan(basePackageClasses = {BankApplication.class/*, Jsr310JpaConverters.class*/})
+@EnableScheduling
 public class BankApplication {
 
     @PostConstruct
@@ -36,6 +40,7 @@ public class BankApplication {
     @Transactional
     public CommandLineRunner run(RestTemplate restTemplate) {
         return args -> {
+            System.out.println(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE));
         };
     }
 

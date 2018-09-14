@@ -44,7 +44,7 @@ public class SavingsController implements AbstractController<Savings, Integer> {
 
     @PutMapping("search")
     public List<Savings> search(@RequestBody Savings savings) {
-        return null;
+        return modifyResources(savingsService.search(savings));
     }
 
     @Override

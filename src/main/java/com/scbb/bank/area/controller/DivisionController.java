@@ -50,11 +50,12 @@ public class DivisionController implements AbstractController<Division, Integer>
 
 
     public Division modifyResource(Division division) {
-        if (!division.getSocietyList().isEmpty())
+        if (division.getSocietyList() != null)
             division.getSocietyList().forEach(society -> {
                 society.setDivision(null);
                 society.setTeamList(null);
             });
+
         if (division.getBoardMember() != null) {
             division.getBoardMember().setUser(null);
             division.getBoardMember().setDivision(null);

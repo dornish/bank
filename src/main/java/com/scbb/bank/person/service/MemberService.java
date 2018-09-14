@@ -1,6 +1,7 @@
 package com.scbb.bank.person.service;
 
 import com.scbb.bank.interfaces.AbstractService;
+import com.scbb.bank.ledger.service.AccountService;
 import com.scbb.bank.person.model.Member;
 import com.scbb.bank.person.model.Subsidy;
 import com.scbb.bank.person.repository.MemberRepository;
@@ -15,13 +16,15 @@ import java.util.List;
 public class MemberService implements AbstractService<Member, Integer> {
 
     private MemberRepository memberRepository;
+    private AccountService accountService;
 
-    public MemberService(MemberRepository memberRepository) {
+    public MemberService(MemberRepository memberRepository, AccountService accountService) {
         this.memberRepository = memberRepository;
+        this.accountService = accountService;
     }
 
 
-    @Override
+    @Transactional
     public List<Member> findAll() {
         return memberRepository.findAll();
     }
@@ -31,23 +34,22 @@ public class MemberService implements AbstractService<Member, Integer> {
         return memberRepository.findAllByTeamId(id);
     }
 
-    @Override
+    @Transactional
     public Member findById(Integer id) {
         return memberRepository.getOne(id);
     }
 
     @Transactional
-    @Override
     public Member persist(Member member) {
         if (member.getSubsidy() != null) {
             Subsidy subsidy = member.getSubsidy();
             subsidy.setMember(member);
         }
+        if (member.getId() == null) accountService.persist(member.getShareAccount());
         return memberRepository.save(member);
     }
 
     @Transactional
-    @Override
     public boolean delete(Integer id) {
         Member member = memberRepository.getOne(id);
         if (member.getBoardMember() != null)
@@ -56,7 +58,7 @@ public class MemberService implements AbstractService<Member, Integer> {
         return false;
     }
 
-    @Override
+    @Transactional
     public List<Member> search(Member member) {
         ExampleMatcher matcher = ExampleMatcher
                 .matching()

@@ -9,9 +9,10 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoanStatusResponse {
+public class InstallmentScheduleRequest {
 
-    private BigDecimal interest;
-    // private BigDecimal fine;
-    private BigDecimal principal;
+    private BigDecimal amount;
+    private BigDecimal interestRate;
+    private Integer duration;
+
 }

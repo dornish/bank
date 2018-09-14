@@ -57,7 +57,7 @@ public class SubAccountTypeController implements AbstractController<SubAccountTy
             subAccountType.getAccountType().setSubAccountTypeList(null);
             subAccountType.getAccountType().setAccountList(null);
         }
-        if (!subAccountType.getAccountList().isEmpty()) {
+        if (subAccountType.getAccountList() != null) {
             subAccountType.getAccountList().forEach(account -> {
                 account.setShareHolder(null);
                 account.setAccountType(null);
