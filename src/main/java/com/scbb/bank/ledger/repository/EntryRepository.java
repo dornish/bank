@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface EntryRepository extends JpaRepository<Entry, Integer> {
 
-    List<Entry> findTop3ByAccountNumberOrderByTransactionDateTimeDesc(String number);
+	List<Entry> findTop3ByAccountNumberOrderByTransactionDateTimeDesc(String number);
 }

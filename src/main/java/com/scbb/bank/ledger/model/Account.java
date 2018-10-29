@@ -6,79 +6,92 @@ import com.scbb.bank.ledger.model.enums.OperationType;
 import com.scbb.bank.loan.model.Loan;
 import com.scbb.bank.person.model.Member;
 import com.scbb.bank.savings.model.Savings;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
 public class Account {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-    private String number;
+	private String number;
 
-    private String name;
+	private String name;
 
-    @Column(precision = 12, scale = 2)
-    private BigDecimal balance;
+	@Column(precision = 12, scale = 2)
+	private BigDecimal balance;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime lastUpdatedDateTime;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private LocalDateTime lastUpdatedDateTime;
 
-    @Enumerated(EnumType.STRING)
-    private OperationType operationType;
+	@Enumerated(EnumType.STRING)
+	private OperationType operationType;
 
-    @ManyToOne
-    private AccountType accountType;
+	@ManyToOne
+	private AccountType accountType;
 
-    @ManyToOne
-    private SubAccountType subAccountType;
+	@ManyToOne
+	private SubAccountType subAccountType;
 
-    @OneToOne(mappedBy = "shareAccount")
-    private Member shareHolder;
+	@OneToOne(mappedBy = "shareAccount")
+	private Member shareHolder;
 
-    @OneToOne(mappedBy = "account")
-    private Savings savings;
+	@OneToOne(mappedBy = "account")
+	private Savings savings;
 
-    @OneToOne(mappedBy = "account")
-    private Team team;
+	@OneToOne(mappedBy = "account")
+	private Team team;
 
-    @OneToOne(mappedBy = "account")
-    private Loan loan;
+	@OneToOne(mappedBy = "account")
+	private Loan loan;
 
-    public void credit(BigDecimal amount) {
-        if (operationType == OperationType.Credit) setBalance(getBalance().add(amount));
-        else setBalance(getBalance().subtract(amount));
-        setLastUpdatedDateTime(LocalDateTime.now());
-    }
+	public void credit(BigDecimal amount) {
+		if (operationType == OperationType.Credit)
+			setBalance(getBalance().add(amount));
+		else
+			setBalance(getBalance().subtract(amount));
+		setLastUpdatedDateTime(LocalDateTime.now());
+	}
 
-    public void debit(BigDecimal amount) {
-        if (operationType == OperationType.Debit) setBalance(getBalance().add(amount));
-        else setBalance(getBalance().subtract(amount));
-        setLastUpdatedDateTime(LocalDateTime.now());
-    }
+	public void debit(BigDecimal amount) {
+		if (operationType == OperationType.Debit)
+			setBalance(getBalance().add(amount));
+		else
+			setBalance(getBalance().subtract(amount));
+		setLastUpdatedDateTime(LocalDateTime.now());
+	}
 
-    public Account(Integer id) {
-        this.id = id;
-    }
+	public Account(Integer id) {
+		this.id = id;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Account)) return false;
-        Account account = (Account) o;
-        return id != null ? id.equals(account.id) : account.id == null;
-    }
+	public Account(String name, OperationType operationType, AccountType accountType, SubAccountType subAccountType) {
+		this.name = name;
+		this.operationType = operationType;
+		this.accountType = accountType;
+		this.subAccountType = subAccountType;
+	}
 
-    @Override
-    public int hashCode() {
-        return id != null ? id.hashCode() : 0;
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Account)) return false;
+		Account account = (Account) o;
+		return id != null ? id.equals(account.id) : account.id == null;
+	}
+
+	@Override
+	public int hashCode() {
+		return id != null ? id.hashCode() : 0;
+	}
 }

@@ -14,74 +14,75 @@ import java.util.stream.Collectors;
 @RequestMapping("teams")
 public class TeamController implements AbstractController<Team, Integer> {
 
-    private TeamService teamService;
+	private TeamService teamService;
 
-    public TeamController(TeamService teamService) {
-        this.teamService = teamService;
-    }
-
-
-    @GetMapping
-    public List<Team> findAll() {
-        return modifyResources(teamService.findAll());
-    }
-
-    @GetMapping("society/{id}")
-    public List<Team> findAllBySocietyId(@PathVariable Integer id) {
-        return modifyResources(teamService.findAllBySocietyId(id));
-    }
-
-    @GetMapping("{id}")
-    public Team findById(@PathVariable Integer id) {
-        return modifyResource(teamService.findById(id));
-    }
-
-    @PostMapping
-    @PutMapping
-    public Team persist(@RequestBody Team team) {
-        return modifyResource(teamService.persist(team));
-    }
+	public TeamController(TeamService teamService) {
+		this.teamService = teamService;
+	}
 
 
-    @DeleteMapping("{id}")
-    public ResponseEntity delete(@PathVariable Integer id) {
-        teamService.delete(id);
-        return ResponseEntity.ok().build();
-    }
+	@GetMapping
+	public List<Team> findAll() {
+		return modifyResources(teamService.findAll());
+	}
 
-    @PutMapping("search")
-    public List<Team> search(@RequestBody Team team) {
-        return modifyResources(teamService.search(team));
-    }
+	@GetMapping("society/{id}")
+	public List<Team> findAllBySocietyId(@PathVariable Integer id) {
+		return modifyResources(teamService.findAllBySocietyId(id));
+	}
 
-    public Team modifyResource(Team team) {
-        if (team.getSociety() != null) {
-            team.getSociety().setTeamList(null);
-            team.getSociety().setDivision(null);
-        }
-        if (team.getMemberList() != null)
-            team.getMemberList().forEach(member -> {
-                member.setTeam(null);
-                member.setSubsidy(null);
-                member.setBoardMember(null);
-                member.setShareAccount(null);
-                member.setSavingsList(null);
-            });
-        if (team.getAccount() != null) {
-            team.getAccount().setSubAccountType(null);
-            team.getAccount().setTeam(null);
-            team.getAccount().setAccountType(null);
-            team.getAccount().setShareHolder(null);
-            team.getAccount().setLoan(null);
-            team.getAccount().setSavings(null);
-        }
-        return team;
-    }
+	@GetMapping("{id}")
+	public Team findById(@PathVariable Integer id) {
+		return modifyResource(teamService.findById(id));
+	}
 
-    public List<Team> modifyResources(List<Team> teamList) {
-        return teamList
-                .stream()
-                .map(this::modifyResource)
-                .collect(Collectors.toList());
-    }
+	@PostMapping
+	@PutMapping
+	public Team persist(@RequestBody Team team) {
+		return modifyResource(teamService.persist(team));
+	}
+
+
+	@DeleteMapping("{id}")
+	public ResponseEntity<String> delete(@PathVariable Integer id) {
+		teamService.delete(id);
+		return ResponseEntity.ok("Successfully deleted team with having id: " + id);
+	}
+
+	@PutMapping("search")
+	public List<Team> search(@RequestBody Team team) {
+		return modifyResources(teamService.search(team));
+	}
+
+	public Team modifyResource(Team team) {
+		if (team.getSociety() != null) {
+			team.getSociety().setTeamList(null);
+			team.getSociety().setDivision(null);
+		}
+		if (team.getMemberList() != null)
+			team.getMemberList().forEach(member -> {
+				member.setTeam(null);
+				member.setSubsidy(null);
+				member.setBoardMember(null);
+				member.setShareAccount(null);
+				member.setSavingsList(null);
+				member.setLoanList(null);
+			});
+		if (team.getAccount() != null) {
+			team.getAccount().setSubAccountType(null);
+			team.getAccount().setTeam(null);
+			team.getAccount().setAccountType(null);
+			team.getAccount().setShareHolder(null);
+			team.getAccount().setLoan(null);
+			team.getAccount().setSavings(null);
+		}
+		return team;
+	}
+
+	public List<Team> modifyResources(List<Team> teamList) {
+		return teamList
+				.stream()
+				.map(this::modifyResource)
+				.collect(Collectors.toList());
+	}
 }

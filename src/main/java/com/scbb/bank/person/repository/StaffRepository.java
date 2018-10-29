@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface StaffRepository extends JpaRepository<Staff, Integer> {
 
-    List<Staff> findAllByDivisionIsNull();
+	List<Staff> findAllByDivisionIsNull();
 
 }

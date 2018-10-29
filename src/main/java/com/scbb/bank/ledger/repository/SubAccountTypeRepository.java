@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface SubAccountTypeRepository extends JpaRepository<SubAccountType, Integer> {
 
-    List<SubAccountType> findAllByAccountTypeId(Integer id);
+	List<SubAccountType> findAllByAccountTypeId(Integer id);
 }

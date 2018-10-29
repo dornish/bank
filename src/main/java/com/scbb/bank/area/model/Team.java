@@ -2,43 +2,45 @@ package com.scbb.bank.area.model;
 
 import com.scbb.bank.ledger.model.Account;
 import com.scbb.bank.person.model.Member;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Data
+@Getter
+@Setter
 @Entity
 public class Team {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-    private String name;
+	private String name;
 
-    @OneToMany(mappedBy = "team")
-    private List<Member> memberList = new ArrayList<>();
+	@OneToMany(mappedBy = "team")
+	private List<Member> memberList = new ArrayList<>();
 
-    @ManyToOne
-    private Society society;
+	@ManyToOne
+	private Society society;
 
-    @OneToOne
-    private Account account;
+	@OneToOne
+	private Account account;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Team)) return false;
-        Team team = (Team) o;
-        return Objects.equals(id, team.id);
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Team)) return false;
+		Team team = (Team) o;
+		return Objects.equals(id, team.id);
+	}
 
-    @Override
-    public int hashCode() {
+	@Override
+	public int hashCode() {
 
-        return Objects.hash(id);
-    }
+		return Objects.hash(id);
+	}
 }

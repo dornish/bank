@@ -14,64 +14,64 @@ import java.util.stream.Collectors;
 @RequestMapping("/staff")
 public class StaffController implements AbstractController<Staff, Integer> {
 
-    private StaffService staffService;
+	private StaffService staffService;
 
-    public StaffController(StaffService staffService) {
-        this.staffService = staffService;
-    }
+	public StaffController(StaffService staffService) {
+		this.staffService = staffService;
+	}
 
-    @GetMapping
-    public List<Staff> findAll() {
-        return modifyResources(staffService.findAll());
-    }
+	@GetMapping
+	public List<Staff> findAll() {
+		return modifyResources(staffService.findAll());
+	}
 
-    @GetMapping("/divisionIsNull")
-    public List<Staff> findAllByDivisionIsNull() {
-        return modifyResources(staffService.findAllByDivisionIsNull());
-    }
+	@GetMapping("/divisionIsNull")
+	public List<Staff> findAllByDivisionIsNull() {
+		return modifyResources(staffService.findAllByDivisionIsNull());
+	}
 
-    @GetMapping("{id}")
-    public Staff findById(@PathVariable Integer id) {
-        return modifyResource(staffService.findById(id));
-    }
+	@GetMapping("{id}")
+	public Staff findById(@PathVariable Integer id) {
+		return modifyResource(staffService.findById(id));
+	}
 
-    @PostMapping
-    @PutMapping
-    public Staff persist(@RequestBody Staff staff) {
-        return modifyResource(staffService.persist(staff));
-    }
+	@PostMapping
+	@PutMapping
+	public Staff persist(@RequestBody Staff staff) {
+		return modifyResource(staffService.persist(staff));
+	}
 
-    @DeleteMapping("{id}")
-    public ResponseEntity delete(@PathVariable Integer id) {
-        staffService.delete(id);
-        return ResponseEntity.ok().build();
-    }
+	@DeleteMapping("{id}")
+	public ResponseEntity<String> delete(@PathVariable Integer id) {
+		staffService.delete(id);
+		return ResponseEntity.ok("Successfully deleted staff with having id: " + id);
+	}
 
-    @PutMapping("/search")
-    public List<Staff> search(@RequestBody Staff staff) {
-        return modifyResources(staffService.search(staff));
-    }
+	@PutMapping("/search")
+	public List<Staff> search(@RequestBody Staff staff) {
+		return modifyResources(staffService.search(staff));
+	}
 
 
-    public Staff modifyResource(Staff staff) {
-        if (staff.getDivision() != null) {
-            staff.getDivision().setStaff(null);
-            staff.getDivision().setSocietyList(null);
-            staff.getDivision().setBoardMember(null);
-        }
-        if (staff.getUser() != null) {
-            staff.getUser().setStaff(null);
-            staff.getUser().setAuthorities(null);
-            staff.getUser().setBoardMember(null);
-        }
-        return staff;
-    }
+	public Staff modifyResource(Staff staff) {
+		if (staff.getDivision() != null) {
+			staff.getDivision().setStaff(null);
+			staff.getDivision().setSocietyList(null);
+			staff.getDivision().setBoardMember(null);
+		}
+		if (staff.getUser() != null) {
+			staff.getUser().setStaff(null);
+			staff.getUser().setAuthorities(null);
+			staff.getUser().setBoardMember(null);
+		}
+		return staff;
+	}
 
-    public List<Staff> modifyResources(List<Staff> staffList) {
-        return staffList
-                .stream()
-                .map(this::modifyResource)
-                .collect(Collectors.toList());
-    }
+	public List<Staff> modifyResources(List<Staff> staffList) {
+		return staffList
+				.stream()
+				.map(this::modifyResource)
+				.collect(Collectors.toList());
+	}
 
 }

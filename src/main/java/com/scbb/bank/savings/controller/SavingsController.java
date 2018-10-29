@@ -14,63 +14,69 @@ import java.util.stream.Collectors;
 @RequestMapping("savings")
 public class SavingsController implements AbstractController<Savings, Integer> {
 
-    private SavingsService savingsService;
+	private SavingsService savingsService;
 
-    public SavingsController(SavingsService savingsService) {
-        this.savingsService = savingsService;
-    }
+	public SavingsController(SavingsService savingsService) {
+		this.savingsService = savingsService;
+	}
 
-    @GetMapping
-    public List<Savings> findAll() {
-        return modifyResources(savingsService.findAll());
-    }
+	@GetMapping
+	public List<Savings> findAll() {
+		return modifyResources(savingsService.findAll());
+	}
 
-    @GetMapping("{id}")
-    public Savings findById(@PathVariable Integer id) {
-        return modifyResource(savingsService.findById(id));
-    }
+	@GetMapping("members/{id}")
+	public List<Savings> findAllByMemberId(@PathVariable Integer id) {
+		return modifyResources(savingsService.findAllByMemberId(id));
+	}
 
-    @PostMapping
-    @PutMapping
-    public Savings persist(@RequestBody Savings savings) {
-        return modifyResource(savingsService.persist(savings));
-    }
+	@GetMapping("{id}")
+	public Savings findById(@PathVariable Integer id) {
+		return modifyResource(savingsService.findById(id));
+	}
 
-    @DeleteMapping("{id}")
-    public ResponseEntity delete(@PathVariable Integer id) {
-//        return savingsService.delete(id);
-        return null;
-    }
+	@PostMapping
+	@PutMapping
+	public Savings persist(@RequestBody Savings savings) {
+		return modifyResource(savingsService.persist(savings));
+	}
 
-    @PutMapping("search")
-    public List<Savings> search(@RequestBody Savings savings) {
-        return modifyResources(savingsService.search(savings));
-    }
+	@DeleteMapping("{id}")
+	public ResponseEntity<String> delete(@PathVariable Integer id) {
+		savingsService.delete(id);
+		return ResponseEntity.ok("Successfully deleted Resource with having id: " + id);
+	}
 
-    @Override
-    public Savings modifyResource(Savings savings) {
-        if (savings.getAccount() != null) {
-            savings.getAccount().setShareHolder(null);
-            savings.getAccount().setAccountType(null);
-            savings.getAccount().setSubAccountType(null);
-            savings.getAccount().setTeam(null);
-            savings.getAccount().setSavings(null);
-            savings.getAccount().setLoan(null);
-        }
-        if (savings.getMember() != null) {
-            savings.getMember().setShareAccount(null);
-            savings.getMember().setTeam(null);
-            savings.getMember().setBoardMember(null);
-            savings.getMember().setSubsidy(null);
-            savings.getMember().setSavingsList(null);
-        }
-        return savings;
-    }
+	@PutMapping("search")
+	public List<Savings> search(@RequestBody Savings savings) {
+		return modifyResources(savingsService.search(savings));
+	}
 
-    @Override
-    public List<Savings> modifyResources(List<Savings> savings) {
-        return savings.stream()
-                .map(this::modifyResource)
-                .collect(Collectors.toList());
-    }
+	@Override
+	public Savings modifyResource(Savings savings) {
+		if (savings.getAccount() != null) {
+			savings.getAccount().setShareHolder(null);
+			savings.getAccount().setAccountType(null);
+			savings.getAccount().setSubAccountType(null);
+			savings.getAccount().setTeam(null);
+			savings.getAccount().setSavings(null);
+			savings.getAccount().setLoan(null);
+		}
+		if (savings.getMember() != null) {
+			savings.getMember().setShareAccount(null);
+			savings.getMember().setTeam(null);
+			savings.getMember().setBoardMember(null);
+			savings.getMember().setSubsidy(null);
+			savings.getMember().setSavingsList(null);
+			savings.getMember().setLoanList(null);
+		}
+		return savings;
+	}
+
+	@Override
+	public List<Savings> modifyResources(List<Savings> savings) {
+		return savings.stream()
+				.map(this::modifyResource)
+				.collect(Collectors.toList());
+	}
 }

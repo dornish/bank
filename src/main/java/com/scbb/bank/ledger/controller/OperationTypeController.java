@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("operationTypes")
 public class OperationTypeController {
 
-    @GetMapping
-    public OperationType[] findAll() {
-        return OperationType.values();
-    }
+	@GetMapping
+	public OperationType[] findAll() {
+		return OperationType.values();
+	}
 }

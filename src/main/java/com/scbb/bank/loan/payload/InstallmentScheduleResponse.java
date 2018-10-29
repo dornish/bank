@@ -13,10 +13,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class InstallmentScheduleResponse {
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate date;
-    private BigDecimal interest;
-    private BigDecimal total;
-    private BigDecimal principal;
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	private LocalDate date;
+	private BigDecimal interest;
+	private BigDecimal total;
+	private BigDecimal principal;
 
 }

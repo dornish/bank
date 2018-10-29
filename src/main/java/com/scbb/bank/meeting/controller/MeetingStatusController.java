@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/meetingStatuses")
 public class MeetingStatusController {
 
-    @GetMapping
-    public ResponseEntity<MeetingStatus[]> findAll() {
-        return ResponseEntity.ok(MeetingStatus.values());
-    }
+	@GetMapping
+	public ResponseEntity<MeetingStatus[]> findAll() {
+		return ResponseEntity.ok(MeetingStatus.values());
+	}
 
 }

@@ -1,5 +1,6 @@
 package com.scbb.bank.savings.service;
 
+import com.scbb.bank.exception.ResourceNotFoundException;
 import com.scbb.bank.interfaces.AbstractService;
 import com.scbb.bank.ledger.service.AccountService;
 import com.scbb.bank.savings.model.Savings;
@@ -14,46 +15,51 @@ import java.util.List;
 @Service
 public class SavingsService implements AbstractService<Savings, Integer> {
 
-    private SavingsRepository savingsRepository;
-    private AccountService accountService;
+	private SavingsRepository savingsRepository;
+	private AccountService accountService;
 
-    public SavingsService(SavingsRepository savingsRepository, AccountService accountService) {
-        this.savingsRepository = savingsRepository;
-        this.accountService = accountService;
-    }
+	public SavingsService(SavingsRepository savingsRepository, AccountService accountService) {
+		this.savingsRepository = savingsRepository;
+		this.accountService = accountService;
+	}
 
-    @Transactional
-    public List<Savings> findAll() {
-        return savingsRepository.findAll();
-    }
+	@Transactional
+	public List<Savings> findAll() {
+		return savingsRepository.findAll();
+	}
 
-    @Transactional
-    public Savings findById(Integer id) {
-        return savingsRepository.getOne(id);
-    }
+	@Transactional
+	public List<Savings> findAllByMemberId(Integer id) {
+		return savingsRepository.findAllByMemberId(id);
+	}
 
-    @Transactional
-    public Savings persist(Savings savings) {
-        if (savings.getId() == null)
-            accountService.persist(savings.getAccount());
-        return savingsRepository.save(savings);
-    }
+	@Transactional
+	public Savings findById(Integer id) {
+		return savingsRepository.getOne(id);
+	}
 
-    @Transactional
-    public boolean delete(Integer id) {
-        savingsRepository.deleteById(id);
-        return true;
-    }
+	@Transactional
+	public Savings persist(Savings savings) {
+		if (savings.getId() == null)
+			accountService.persist(savings.getAccount());
+		return savingsRepository.save(savings);
+	}
 
-    @Transactional
-    public List<Savings> search(Savings savings) {
-        ExampleMatcher matcher = ExampleMatcher
-                .matching()
-                .withIgnoreCase()
-                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+	@Transactional
+	public void delete(Integer id) {
+		savingsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Resource having id " + id + " cannot find"));
+		savingsRepository.deleteById(id);
+	}
 
-        Example<Savings> example = Example.of(savings, matcher);
+	@Transactional
+	public List<Savings> search(Savings savings) {
+		ExampleMatcher matcher = ExampleMatcher
+				.matching()
+				.withIgnoreCase()
+				.withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
 
-        return savingsRepository.findAll(example);
-    }
+		Example<Savings> example = Example.of(savings, matcher);
+
+		return savingsRepository.findAll(example);
+	}
 }

@@ -11,8 +11,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class InstallmentScheduleRequest {
 
-    private BigDecimal amount;
-    private BigDecimal interestRate;
-    private Integer duration;
+	private BigDecimal amount;
+	private BigDecimal interestRate;
+	private Integer duration;
 
 }

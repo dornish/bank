@@ -13,44 +13,44 @@ import java.util.List;
 @RequestMapping("/roles")
 public class RoleController implements AbstractController<Role, Integer> {
 
-    private RoleService roleService;
+	private RoleService roleService;
 
-    public RoleController(RoleService roleService) {
-        this.roleService = roleService;
-    }
+	public RoleController(RoleService roleService) {
+		this.roleService = roleService;
+	}
 
-    @GetMapping
-    public List<Role> findAll() {
-        return modifyResources(roleService.findAll());
-    }
+	@GetMapping
+	public List<Role> findAll() {
+		return modifyResources(roleService.findAll());
+	}
 
-    @GetMapping("{id}")
-    public Role findById(@PathVariable Integer id) {
-        return modifyResource(roleService.findById(id));
-    }
+	@GetMapping("{id}")
+	public Role findById(@PathVariable Integer id) {
+		return modifyResource(roleService.findById(id));
+	}
 
-    @PostMapping
-    @PutMapping
-    public Role persist(@RequestBody Role staff) {
-        return modifyResource(roleService.persist(staff));
-    }
+	@PostMapping
+	@PutMapping
+	public Role persist(@RequestBody Role staff) {
+		return modifyResource(roleService.persist(staff));
+	}
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<Boolean> delete(@PathVariable Integer id) {
-        roleService.delete(id);
-        return ResponseEntity.ok(true);
-    }
+	@DeleteMapping("{id}")
+	public ResponseEntity<String> delete(@PathVariable Integer id) {
+		roleService.delete(id);
+		return ResponseEntity.ok("Successfully deleted role with having id: " + id);
+	}
 
-    @Override
-    public List<Role> search(Role role) {
-        return null;
-    }
+	@Override
+	public List<Role> search(Role role) {
+		return null;
+	}
 
-    public Role modifyResource(Role staff) {
-        return staff;
-    }
+	public Role modifyResource(Role staff) {
+		return staff;
+	}
 
-    public List<Role> modifyResources(List<Role> staffList) {
-        return staffList;
-    }
+	public List<Role> modifyResources(List<Role> staffList) {
+		return staffList;
+	}
 }

@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface SocietyRepository extends JpaRepository<Society, Integer> {
 
-    List<Society> findAllByDivisionId(Integer id);
+	List<Society> findAllByDivisionId(Integer id);
 }

@@ -13,44 +13,44 @@ import java.util.List;
 @RequestMapping("savingTypes")
 public class SavingTypeController implements AbstractController<SavingType, Integer> {
 
-    private SavingTypeService savingTypeService;
+	private SavingTypeService savingTypeService;
 
-    public SavingTypeController(SavingTypeService savingTypeService) {
-        this.savingTypeService = savingTypeService;
-    }
+	public SavingTypeController(SavingTypeService savingTypeService) {
+		this.savingTypeService = savingTypeService;
+	}
 
-    @GetMapping
-    public List<SavingType> findAll() {
-        return savingTypeService.findAll();
-    }
+	@GetMapping
+	public List<SavingType> findAll() {
+		return savingTypeService.findAll();
+	}
 
-    @GetMapping("{id}")
-    public SavingType findById(@PathVariable Integer id) {
-        return savingTypeService.findById(id);
-    }
+	@GetMapping("{id}")
+	public SavingType findById(@PathVariable Integer id) {
+		return savingTypeService.findById(id);
+	}
 
-    @Override
-    public SavingType persist(SavingType savingType) {
-        return null;
-    }
+	@Override
+	public SavingType persist(SavingType savingType) {
+		return null;
+	}
 
-    @Override
-    public ResponseEntity delete(Integer id) {
-        return null;
-    }
+	@Override
+	public ResponseEntity<String> delete(Integer id) {
+		return null;
+	}
 
-    @Override
-    public List<SavingType> search(SavingType savingType) {
-        return null;
-    }
+	@Override
+	public List<SavingType> search(SavingType savingType) {
+		return null;
+	}
 
-    @Override
-    public SavingType modifyResource(SavingType savingType) {
-        return null;
-    }
+	@Override
+	public SavingType modifyResource(SavingType savingType) {
+		return null;
+	}
 
-    @Override
-    public List<SavingType> modifyResources(List<SavingType> savingTypes) {
-        return null;
-    }
+	@Override
+	public List<SavingType> modifyResources(List<SavingType> savingTypes) {
+		return null;
+	}
 }

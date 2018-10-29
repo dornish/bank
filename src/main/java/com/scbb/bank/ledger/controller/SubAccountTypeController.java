@@ -3,6 +3,7 @@ package com.scbb.bank.ledger.controller;
 import com.scbb.bank.interfaces.AbstractController;
 import com.scbb.bank.ledger.model.SubAccountType;
 import com.scbb.bank.ledger.service.SubAccountTypeService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,66 +15,66 @@ import java.util.stream.Collectors;
 @RequestMapping("subAccountTypes")
 public class SubAccountTypeController implements AbstractController<SubAccountType, Integer> {
 
-    private SubAccountTypeService subAccountTypeService;
+	private SubAccountTypeService subAccountTypeService;
 
-    public SubAccountTypeController(SubAccountTypeService subAccountTypeService) {
-        this.subAccountTypeService = subAccountTypeService;
-    }
+	public SubAccountTypeController(SubAccountTypeService subAccountTypeService) {
+		this.subAccountTypeService = subAccountTypeService;
+	}
 
-    @GetMapping
-    public List<SubAccountType> findAll() {
-        return modifyResources(subAccountTypeService.findAll());
-    }
+	@GetMapping
+	public List<SubAccountType> findAll() {
+		return modifyResources(subAccountTypeService.findAll());
+	}
 
-    @GetMapping("accountType/{id}")
-    public List<SubAccountType> findAllByAccountTypeId(@PathVariable Integer id) {
-        return modifyResources(subAccountTypeService.findAllByAccountTypeId(id));
-    }
+	@GetMapping("accountType/{id}")
+	public List<SubAccountType> findAllByAccountTypeId(@PathVariable Integer id) {
+		return modifyResources(subAccountTypeService.findAllByAccountTypeId(id));
+	}
 
 
-    @GetMapping("{id}")
-    public SubAccountType findById(@PathVariable Integer id) {
-        return modifyResource(subAccountTypeService.findById(id));
-    }
+	@GetMapping("{id}")
+	public SubAccountType findById(@PathVariable Integer id) {
+		return modifyResource(subAccountTypeService.findById(id));
+	}
 
-    @Override
-    public SubAccountType persist(SubAccountType subAccountType) {
-        return null;
-    }
+	@Override
+	public SubAccountType persist(SubAccountType subAccountType) {
+		return null;
+	}
 
-    @Override
-    public ResponseEntity delete(Integer id) {
-        return null;
-    }
+	@Override
+	public ResponseEntity<String> delete(Integer id) {
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Sub account types cannot be deleted");
+	}
 
-    @Override
-    public List<SubAccountType> search(SubAccountType subAccountType) {
-        return null;
-    }
+	@Override
+	public List<SubAccountType> search(SubAccountType subAccountType) {
+		return null;
+	}
 
-    @Override
-    public SubAccountType modifyResource(SubAccountType subAccountType) {
-        if (subAccountType.getAccountType() != null) {
-            subAccountType.getAccountType().setSubAccountTypeList(null);
-            subAccountType.getAccountType().setAccountList(null);
-        }
-        if (subAccountType.getAccountList() != null) {
-            subAccountType.getAccountList().forEach(account -> {
-                account.setShareHolder(null);
-                account.setAccountType(null);
-                account.setSubAccountType(null);
-                account.setTeam(null);
-                account.setSavings(null);
-                account.setLoan(null);
-            });
-        }
-        return subAccountType;
-    }
+	@Override
+	public SubAccountType modifyResource(SubAccountType subAccountType) {
+		if (subAccountType.getAccountType() != null) {
+			subAccountType.getAccountType().setSubAccountTypeList(null);
+			subAccountType.getAccountType().setAccountList(null);
+		}
+		if (subAccountType.getAccountList() != null) {
+			subAccountType.getAccountList().forEach(account -> {
+				account.setShareHolder(null);
+				account.setAccountType(null);
+				account.setSubAccountType(null);
+				account.setTeam(null);
+				account.setSavings(null);
+				account.setLoan(null);
+			});
+		}
+		return subAccountType;
+	}
 
-    @Override
-    public List<SubAccountType> modifyResources(List<SubAccountType> subAccountTypes) {
-        return subAccountTypes.stream()
-                .map(this::modifyResource)
-                .collect(Collectors.toList());
-    }
+	@Override
+	public List<SubAccountType> modifyResources(List<SubAccountType> subAccountTypes) {
+		return subAccountTypes.stream()
+				.map(this::modifyResource)
+				.collect(Collectors.toList());
+	}
 }

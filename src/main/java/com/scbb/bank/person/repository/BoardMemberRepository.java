@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface BoardMemberRepository extends JpaRepository<BoardMember, Integer> {
 
-    List<BoardMember> findAllByDivisionIsNull();
+	List<BoardMember> findAllByDivisionIsNull();
 }

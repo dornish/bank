@@ -2,6 +2,7 @@ package com.scbb.bank.loan.controller;
 
 import com.scbb.bank.interfaces.AbstractController;
 import com.scbb.bank.loan.model.Loan;
+import com.scbb.bank.loan.model.enums.LoanReleaseType;
 import com.scbb.bank.loan.payload.InstallmentScheduleRequest;
 import com.scbb.bank.loan.payload.InstallmentScheduleResponse;
 import com.scbb.bank.loan.payload.LoanStatusRequest;
@@ -19,90 +20,103 @@ import java.util.stream.Collectors;
 @RequestMapping("loans")
 public class LoanController implements AbstractController<Loan, Integer> {
 
-    private LoanService loanService;
+	private LoanService loanService;
 
-    public LoanController(LoanService loanService) {
-        this.loanService = loanService;
-    }
+	public LoanController(LoanService loanService) {
+		this.loanService = loanService;
+	}
 
-    @GetMapping
-    public List<Loan> findAll() {
-        return modifyResources(loanService.findAll());
-    }
+	@GetMapping
+	public List<Loan> findAll() {
+		return modifyResources(loanService.findAll());
+	}
 
-    @GetMapping("{id}")
-    public Loan findById(@PathVariable Integer id) {
-        return modifyResource(loanService.findById(id));
-    }
+	@GetMapping("members/{id}")
+	public List<Loan> findAllByMemberId(@PathVariable Integer id) {
+		return modifyResources(loanService.findAllByMemberId(id));
+	}
 
-    @GetMapping("calcAmountToBePaid/{id}")
-    public BigDecimal calcAmountToBePaid(@PathVariable Integer id) {
-        return loanService.remainingInstallmentAmount(id);
-    }
+	@GetMapping("{id}")
+	public Loan findById(@PathVariable Integer id) {
+		return modifyResource(loanService.findById(id));
+	}
 
-    @PutMapping("calcInterestAndFine")
-    public LoanStatusResponse calculateInterestAndFine(@RequestBody LoanStatusRequest loanStatusRequest) {
-        return loanService.calculateInterest(loanStatusRequest);
-    }
+	@GetMapping("nextInstallmentAmount/{id}")
+	public BigDecimal nextInstallmentAmount(@PathVariable Integer id) {
+		return loanService.nextInstallmentAmount(id);
+	}
 
-    @PutMapping("calcSchedule")
-    public List<InstallmentScheduleResponse> calculateInstallmentSchedule(@RequestBody InstallmentScheduleRequest request) {
-        return loanService.calculateInstallmentSchedule(request);
-    }
+	@GetMapping("calcArrears/{id}")
+	public BigDecimal calculateArrears(@PathVariable Integer id) {
+		return loanService.calculateArrears(id);
+	}
 
-    @PutMapping("pay/{id}")
-    public Loan payInstallment(@PathVariable Integer id) {
-        return modifyResource(loanService.payInstallment(id));
-    }
+	@PutMapping("calcInterest")
+	public LoanStatusResponse calculateInterest(@RequestBody LoanStatusRequest loanStatusRequest) {
+		return loanService.calculateInterest(loanStatusRequest);
+	}
 
-    @PutMapping("/approve/{id}")
-    public Loan approve(@PathVariable Integer id) {
-        return modifyResource(loanService.approve(id));
-    }
+	@PutMapping("calcSchedule")
+	public List<InstallmentScheduleResponse> calculateInstallmentSchedule(@RequestBody InstallmentScheduleRequest request) {
+		return loanService.calculateInstallmentSchedule(request);
+	}
 
-    @PostMapping
-    @PutMapping
-    public Loan persist(@RequestBody Loan loan) {
-        return modifyResource(loanService.persist(loan));
-    }
+	@PutMapping("/approve/{id}")
+	public Loan approve(@PathVariable Integer id) {
+		return modifyResource(loanService.approve(id));
+	}
 
-    @DeleteMapping("{id}")
-    public ResponseEntity delete(@PathVariable Integer id) {
-        if (loanService.delete(id)) {
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.badRequest().build();
-    }
+	@PutMapping("release/{id}")
+	public Loan release(@PathVariable Integer id,
+	                    @RequestParam LoanReleaseType releaseType,
+	                    @RequestParam(required = false) String accountNumber,
+	                    @RequestHeader("Authorization") String token) {
+		return modifyResource(loanService.release(id, releaseType, accountNumber, token));
+	}
 
-    @Override
-    public List<Loan> search(Loan loan) {
-        return null;
-    }
 
-    @Override
-    public Loan modifyResource(Loan loan) {
-        if (loan.getAccount() != null) {
-            loan.getAccount().setLoan(null);
-            loan.getAccount().setSavings(null);
-            loan.getAccount().setTeam(null);
-            loan.getAccount().setSubAccountType(null);
-            loan.getAccount().setAccountType(null);
-            loan.getAccount().setShareHolder(null);
-        }
-        if (loan.getMember() != null) {
-            loan.getMember().setSavingsList(null);
-            loan.getMember().setSubsidy(null);
-            loan.getMember().setBoardMember(null);
-            loan.getMember().setTeam(null);
-            loan.getMember().setShareAccount(null);
-        }
-        return loan;
-    }
+	@PostMapping
+	@PutMapping
+	public Loan persist(@RequestBody Loan loan) {
+		return modifyResource(loanService.persist(loan));
+	}
 
-    @Override
-    public List<Loan> modifyResources(List<Loan> loans) {
-        return loans.stream()
-                .map(this::modifyResource)
-                .collect(Collectors.toList());
-    }
+	@DeleteMapping("{id}")
+	public ResponseEntity<String> delete(@PathVariable Integer id) {
+		loanService.delete(id);
+		return ResponseEntity.ok("Successfully deleted loan with having id: " + id);
+	}
+
+	@Override
+	public List<Loan> search(Loan loan) {
+		return null;
+	}
+
+	@Override
+	public Loan modifyResource(Loan loan) {
+		if (loan.getAccount() != null) {
+			loan.getAccount().setLoan(null);
+			loan.getAccount().setSavings(null);
+			loan.getAccount().setTeam(null);
+			loan.getAccount().setSubAccountType(null);
+			loan.getAccount().setAccountType(null);
+			loan.getAccount().setShareHolder(null);
+		}
+		if (loan.getMember() != null) {
+			loan.getMember().setLoanList(null);
+			loan.getMember().setSavingsList(null);
+			loan.getMember().setSubsidy(null);
+			loan.getMember().setBoardMember(null);
+			loan.getMember().setTeam(null);
+			loan.getMember().setShareAccount(null);
+		}
+		return loan;
+	}
+
+	@Override
+	public List<Loan> modifyResources(List<Loan> loans) {
+		return loans.stream()
+				.map(this::modifyResource)
+				.collect(Collectors.toList());
+	}
 }

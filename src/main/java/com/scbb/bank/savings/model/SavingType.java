@@ -1,21 +1,23 @@
 package com.scbb.bank.savings.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
-@Data
+@Getter
+@Setter
 @Entity
 public class SavingType {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-    private String name;
+	private String name;
 
-    @Column(precision = 5, scale = 3)
-    private BigDecimal interestRate;
+	@Column(precision = 5, scale = 3)
+	private BigDecimal interestRate;
 
 }

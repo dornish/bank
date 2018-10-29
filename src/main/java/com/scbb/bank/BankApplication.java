@@ -12,8 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.TimeZone;
 
 @SpringBootApplication
@@ -22,26 +22,29 @@ import java.util.TimeZone;
 @EnableScheduling
 public class BankApplication {
 
-    @PostConstruct
-    void init() {
-        TimeZone.setDefault(TimeZone.getTimeZone("GMT+5:30"));
-    }
+	@PostConstruct
+	void init() {
+		TimeZone.setDefault(TimeZone.getTimeZone("GMT+5:30"));
+	}
 
-    public static void main(String[] args) {
-        SpringApplication.run(BankApplication.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(BankApplication.class, args);
+	}
 
-    @Bean
-    public RestTemplate restTemplate(RestTemplateBuilder builder) {
-        return builder.build();
-    }
+	@Bean
+	public RestTemplate restTemplate(RestTemplateBuilder builder) {
+		return builder.build();
+	}
 
-    @Bean
-    @Transactional
-    public CommandLineRunner run(RestTemplate restTemplate) {
-        return args -> {
-            System.out.println(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE));
-        };
-    }
+	@Bean
+	@Transactional
+	public CommandLineRunner run(RestTemplate restTemplate) {
+		return args -> {
+			LocalDate grantedDate = LocalDate.of(2018, Month.APRIL, 20);
+			System.out.println(grantedDate.lengthOfMonth());
+			LocalDate today = LocalDate.now();
+			//System.out.println(grantedDate.until(today, ChronoUnit.DAYS));
+		};
+	}
 
 }

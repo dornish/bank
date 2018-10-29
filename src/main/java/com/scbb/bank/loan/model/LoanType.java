@@ -1,20 +1,22 @@
 package com.scbb.bank.loan.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
-@Data
+@Getter
+@Setter
 @Entity
 public class LoanType {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-    private String name;
+	private String name;
 
-    @Column(scale = 2, precision = 4)
-    private BigDecimal interestRate;
+	@Column(scale = 2, precision = 4)
+	private BigDecimal interestRate;
 }

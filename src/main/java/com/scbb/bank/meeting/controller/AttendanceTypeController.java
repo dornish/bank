@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/attendanceTypes")
 public class AttendanceTypeController {
 
-    @GetMapping
-    public ResponseEntity<AttendanceType[]> findAll() {
-        return ResponseEntity.ok(AttendanceType.values());
-    }
+	@GetMapping
+	public ResponseEntity<AttendanceType[]> findAll() {
+		return ResponseEntity.ok(AttendanceType.values());
+	}
 }

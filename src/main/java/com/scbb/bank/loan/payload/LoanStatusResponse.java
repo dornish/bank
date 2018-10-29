@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class LoanStatusResponse {
 
-    private BigDecimal interest;
-    // private BigDecimal fine;
-    private BigDecimal principal;
+	private BigDecimal interest;
+	// private BigDecimal fine;
+	private BigDecimal principal;
 }

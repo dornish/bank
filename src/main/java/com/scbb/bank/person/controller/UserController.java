@@ -16,73 +16,73 @@ import java.util.stream.Collectors;
 @RequestMapping("/users")
 public class UserController implements AbstractController<User, Integer> {
 
-    private UserService userService;
+	private UserService userService;
 
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+	@Autowired
+	public UserController(UserService userService) {
+		this.userService = userService;
+	}
 
-    @GetMapping
-    public List<User> findAll() {
-        return modifyResources(userService.findAll());
-    }
+	@GetMapping
+	public List<User> findAll() {
+		return modifyResources(userService.findAll());
+	}
 
-    @GetMapping("{id}")
-    public User findById(@PathVariable Integer id) {
-        return modifyResource(userService.findById(id));
-    }
+	@GetMapping("{id}")
+	public User findById(@PathVariable Integer id) {
+		return modifyResource(userService.findById(id));
+	}
 
-    @GetMapping("/staff")
-    public List<User> findAllByHavingStaff() {
-        return modifyResources(userService.findAllByHavingStaff());
-    }
+	@GetMapping("/staff")
+	public List<User> findAllByHavingStaff() {
+		return modifyResources(userService.findAllByHavingStaff());
+	}
 
-    @GetMapping("/boardMember")
-    public List<User> findAllByHavingBoardMember() {
-        return modifyResources(userService.findAllByHavingBoardMember());
-    }
+	@GetMapping("/boardMember")
+	public List<User> findAllByHavingBoardMember() {
+		return modifyResources(userService.findAllByHavingBoardMember());
+	}
 
-    @PostMapping
-    @PutMapping
-    public User persist(@RequestBody User user) {
-        return modifyResource(userService.persist(user));
-    }
+	@PostMapping
+	@PutMapping
+	public User persist(@RequestBody User user) {
+		return modifyResource(userService.persist(user));
+	}
 
-    @DeleteMapping("{id}")
-    public ResponseEntity delete(@PathVariable Integer id) {
-        userService.delete(id);
-        return ResponseEntity.ok(true);
-    }
+	@DeleteMapping("{id}")
+	public ResponseEntity<String> delete(@PathVariable Integer id) {
+		userService.delete(id);
+		return ResponseEntity.ok("Successfully deleted user with having id: " + id);
+	}
 
-    @PutMapping("/search")
-    public List<User> search(@RequestBody User user) {
-        return modifyResources(userService.search(user));
-    }
+	@PutMapping("/search")
+	public List<User> search(@RequestBody User user) {
+		return modifyResources(userService.search(user));
+	}
 
-    public User modifyResource(User user) {
-        if (user.getStaff() != null) {
-            user.getStaff().setUser(null);
-            user.getStaff().setDivision(null);
-        }
-        if (user.getBoardMember() != null) {
-            user.getBoardMember().setUser(null);
-            user.getBoardMember().setDivision(null);
+	public User modifyResource(User user) {
+		if (user.getStaff() != null) {
+			user.getStaff().setUser(null);
+			user.getStaff().setDivision(null);
+		}
+		if (user.getBoardMember() != null) {
+			user.getBoardMember().setUser(null);
+			user.getBoardMember().setDivision(null);
 
-            String fullName = user.getBoardMember().getMember().getFullName();
-            user.getBoardMember().setMember(null);
-            user.getBoardMember().setMember(new Member(fullName));
+			String fullName = user.getBoardMember().getMember().getFullName();
+			user.getBoardMember().setMember(null);
+			user.getBoardMember().setMember(new Member(fullName));
 
-            user.getBoardMember().setAttendanceList(null);
-        }
-        return user;
-    }
+			user.getBoardMember().setAttendanceList(null);
+		}
+		return user;
+	}
 
-    public List<User> modifyResources(List<User> userList) {
-        return userList
-                .stream()
-                .map(this::modifyResource)
-                .collect(Collectors.toList());
-    }
+	public List<User> modifyResources(List<User> userList) {
+		return userList
+				.stream()
+				.map(this::modifyResource)
+				.collect(Collectors.toList());
+	}
 
 }

@@ -11,6 +11,6 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class LoanStatusRequest {
 
-    private String accountNumber;
-    private BigDecimal amount;
+	private String accountNumber;
+	private BigDecimal amount;
 }

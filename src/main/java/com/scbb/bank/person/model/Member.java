@@ -2,68 +2,74 @@ package com.scbb.bank.person.model;
 
 import com.scbb.bank.area.model.Team;
 import com.scbb.bank.ledger.model.Account;
+import com.scbb.bank.loan.model.Loan;
 import com.scbb.bank.person.model.enums.Gender;
 import com.scbb.bank.person.model.enums.IncomeType;
 import com.scbb.bank.savings.model.Savings;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
 public class Member {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-    private String fullName;
-    private String address;
-    private String nic;
-    private LocalDate dob;
-    private String telephone;
-    private String spouse;
+	private String fullName;
+	private String address;
+	private String nic;
+	private LocalDate dob;
+	private String telephone;
+	private String spouse;
 
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
+	@Enumerated(EnumType.STRING)
+	private Gender gender;
 
-    @Enumerated(EnumType.STRING)
-    private IncomeType incomeType;
+	@Enumerated(EnumType.STRING)
+	private IncomeType incomeType;
 
-    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Subsidy subsidy;
+	@OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Subsidy subsidy;
 
-    @OneToOne(mappedBy = "member")
-    private BoardMember boardMember;
+	@OneToOne(mappedBy = "member")
+	private BoardMember boardMember;
 
-    @ManyToOne
-    private Team team;
+	@ManyToOne
+	private Team team;
 
-    @OneToOne
-    private Account shareAccount;
+	@OneToOne
+	private Account shareAccount;
 
-    @OneToMany(mappedBy = "member")
-    private List<Savings> savingsList;
+	@OneToMany(mappedBy = "member")
+	private List<Savings> savingsList;
 
-    public Member(String fullName) {
-        this.fullName = fullName;
-    }
+	@OneToMany(mappedBy = "member")
+	private List<Loan> loanList;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Member)) return false;
-        Member member = (Member) o;
-        return Objects.equals(id, member.id);
-    }
+	public Member(String fullName) {
+		this.fullName = fullName;
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Member)) return false;
+		Member member = (Member) o;
+		return Objects.equals(id, member.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
 }

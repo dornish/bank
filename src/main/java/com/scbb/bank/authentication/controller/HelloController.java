@@ -11,15 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/hello")
 public class HelloController {
 
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    @GetMapping(/*produces="application/json; charset=UTF-8"*/)
-    public String hello() {
-        return "Hello World !!!";
-    }
+	@Secured({"ROLE_USER", "ROLE_ADMIN"})
+	@GetMapping(/*produces="application/json; charset=UTF-8"*/)
+	public String hello() {
+		return "Hello World !!!";
+	}
 
-    @Secured("ROLE_ADMIN")
-    @GetMapping(value = "/secured"/*, produces="application/json; charset=UTF-8"*/)
-    public String helloWithAdmin() {
-        return "Hello World From Admin !!!";
-    }
+	@Secured("ROLE_ADMIN")
+	@GetMapping(value = "/secured"/*, produces="application/json; charset=UTF-8"*/)
+	public String helloWithAdmin() {
+		return "Hello World From Admin !!!";
+	}
 }

@@ -8,14 +8,14 @@ import java.time.LocalTime;
 @Converter(autoApply = true)
 public class LocalTimeAttributeConverter implements AttributeConverter<LocalTime, Time> {
 
-    @Override
-    public Time convertToDatabaseColumn(LocalTime time) {
-        return time == null ? null : Time.valueOf(time);
-    }
+	@Override
+	public Time convertToDatabaseColumn(LocalTime time) {
+		return time == null ? null : Time.valueOf(time);
+	}
 
-    @Override
-    public LocalTime convertToEntityAttribute(Time time) {
-        return time == null ? null : time.toLocalTime();
-    }
+	@Override
+	public LocalTime convertToEntityAttribute(Time time) {
+		return time == null ? null : time.toLocalTime();
+	}
 
 }

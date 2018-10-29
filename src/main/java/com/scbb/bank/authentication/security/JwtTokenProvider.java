@@ -13,78 +13,73 @@ import java.util.HashMap;
 @Component
 public class JwtTokenProvider {
 
-    private String roles = "";
+	private String roles = "";
 
-    @Value("${app.jwtSecret}")
-    private String jwtSecret;
+	@Value("${app.jwtSecret}")
+	private String jwtSecret;
 
-    @Value("${app.jwtExpirationInMs}")
-    private int jwtExpirationInMs;
+	@Value("${app.jwtExpirationInMs}")
+	private int jwtExpirationInMs;
 
-    public String generateToken(Authentication authentication) {
+	public String generateToken(Authentication authentication) {
 
-        User userPrincipal = (User) authentication.getPrincipal();
+		User userPrincipal = (User) authentication.getPrincipal();
 
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
+		Date now = new Date();
+		Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
 
-        // Setting roles claim
-        HashMap<String, Object> claims = new HashMap<>();
-        roles = "";
-        authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .forEach(s -> roles = roles + s + ",");
-        claims.put("roles", roles.substring(0, roles.length() - 1));
-        claims.put("username", userPrincipal.getUsername());
-        claims.put("id", userPrincipal.getId());
+		// Setting roles claim
+		HashMap<String, Object> claims = new HashMap<>();
+		roles = "";
+		authentication.getAuthorities().stream()
+				.map(GrantedAuthority::getAuthority)
+				.forEach(s -> roles = roles + s + ",");
+		claims.put("roles", roles.substring(0, roles.length() - 1));
+		claims.put("username", userPrincipal.getUsername());
+		claims.put("id", userPrincipal.getId());
 
 
-        return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(Integer.toString(userPrincipal.getId()))
-                .setIssuedAt(new Date())
-                .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
-                .compact();
-    }
+		return Jwts.builder()
+				.setClaims(claims)
+				.setSubject(Integer.toString(userPrincipal.getId()))
+				.setIssuedAt(new Date())
+				.setExpiration(expiryDate)
+				.signWith(SignatureAlgorithm.HS512, jwtSecret)
+				.compact();
+	}
 
-    public Integer getUserIdFromToken(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(jwtSecret)
-                .parseClaimsJws(token)
-                .getBody();
-        return Integer.parseInt(claims.getSubject());
-    }
+	public Integer getUserIdFromToken(String token) {
+		Claims claims = Jwts.parser()
+				.setSigningKey(jwtSecret)
+				.parseClaimsJws(token)
+				.getBody();
+		return Integer.parseInt(claims.getSubject());
+	}
 
-    public String getRolesFromToken(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(jwtSecret)
-                .parseClaimsJws(token)
-                .getBody();
-        return claims.get("roles", String.class);
-    }
+	public String getRolesFromToken(String token) {
+		Claims claims = Jwts.parser()
+				.setSigningKey(jwtSecret)
+				.parseClaimsJws(token)
+				.getBody();
+		return claims.get("roles", String.class);
+	}
 
-    public boolean validateToken(String authToken) {
-        try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
-            return true;
-        }
-        catch (SignatureException ex) {
-            System.err.println("Invalid JWT signature");
-        }
-        catch (MalformedJwtException ex) {
-            System.err.println("Invalid JWT token");
-        }
-        catch (ExpiredJwtException ex) {
-            System.err.println("Expired JWT token");
-        }
-        catch (UnsupportedJwtException ex) {
-            System.err.println("Unsupported JWT token");
-        }
-        catch (IllegalArgumentException ex) {
-            System.err.println("JWT claims string is empty.");
-        }
-        return false;
-    }
+	public boolean validateToken(String authToken) {
+		try {
+			Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+			return true;
+		} catch (SignatureException ex) {
+			System.err.println("Invalid JWT signature");
+		} catch (MalformedJwtException ex) {
+			System.err.println("Invalid JWT token");
+		} catch (ExpiredJwtException ex) {
+			System.err.println("Expired JWT token");
+		} catch (UnsupportedJwtException ex) {
+			System.err.println("Unsupported JWT token");
+		} catch (IllegalArgumentException ex) {
+			System.err.println("JWT claims string is empty.");
+		}
+		return false;
+	}
 
 }

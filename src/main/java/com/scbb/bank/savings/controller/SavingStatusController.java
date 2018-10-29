@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("savingStatus")
 public class SavingStatusController {
 
-    @GetMapping
-    public SavingStatus[] findAll() {
-        return SavingStatus.values();
-    }
+	@GetMapping
+	public SavingStatus[] findAll() {
+		return SavingStatus.values();
+	}
 }
