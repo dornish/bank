@@ -2,6 +2,7 @@ package com.scbb.bank.loan.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.scbb.bank.ledger.model.Account;
+import com.scbb.bank.loan.model.enums.LoanStatus;
 import com.scbb.bank.person.model.Member;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,9 +36,8 @@ public class Loan {
 
 	private String remarks;
 
-	private Boolean isApproved;
-
-	private Boolean isReleased;
+	@Enumerated(EnumType.STRING)
+	private LoanStatus loanStatus;
 
 	@ManyToOne
 	private LoanType loanType;

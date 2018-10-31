@@ -7,6 +7,7 @@ import com.scbb.bank.loan.payload.InstallmentScheduleRequest;
 import com.scbb.bank.loan.payload.InstallmentScheduleResponse;
 import com.scbb.bank.loan.payload.LoanStatusRequest;
 import com.scbb.bank.loan.payload.LoanStatusResponse;
+import com.scbb.bank.loan.payload.report.LoanReport;
 import com.scbb.bank.loan.service.LoanService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -51,6 +52,11 @@ public class LoanController implements AbstractController<Loan, Integer> {
 		return loanService.calculateArrears(id);
 	}
 
+	@GetMapping("report/{id}")
+	public LoanReport report(@PathVariable Integer id) {
+		return loanService.report(id);
+	}
+
 	@PutMapping("calcInterest")
 	public LoanStatusResponse calculateInterest(@RequestBody LoanStatusRequest loanStatusRequest) {
 		return loanService.calculateInterest(loanStatusRequest);
@@ -61,17 +67,17 @@ public class LoanController implements AbstractController<Loan, Integer> {
 		return loanService.calculateInstallmentSchedule(request);
 	}
 
-	@PutMapping("/approve/{id}")
-	public Loan approve(@PathVariable Integer id) {
-		return modifyResource(loanService.approve(id));
-	}
-
-	@PutMapping("release/{id}")
-	public Loan release(@PathVariable Integer id,
+	@PutMapping("approve/{id}")
+	public Loan approve(@PathVariable Integer id,
 	                    @RequestParam LoanReleaseType releaseType,
 	                    @RequestParam(required = false) String accountNumber,
 	                    @RequestHeader("Authorization") String token) {
-		return modifyResource(loanService.release(id, releaseType, accountNumber, token));
+		return modifyResource(loanService.approve(id, releaseType, accountNumber, token));
+	}
+
+	@PutMapping("reject/{id}")
+	public Loan reject(@PathVariable Integer id) {
+		return modifyResource(loanService.reject(id));
 	}
 
 
@@ -87,9 +93,9 @@ public class LoanController implements AbstractController<Loan, Integer> {
 		return ResponseEntity.ok("Successfully deleted loan with having id: " + id);
 	}
 
-	@Override
-	public List<Loan> search(Loan loan) {
-		return null;
+	@PutMapping("search")
+	public List<Loan> search(@RequestBody Loan loan) {
+		return modifyResources(loanService.search(loan));
 	}
 
 	@Override

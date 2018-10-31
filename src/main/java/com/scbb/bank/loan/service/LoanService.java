@@ -11,10 +11,12 @@ import com.scbb.bank.ledger.service.AccountService;
 import com.scbb.bank.ledger.service.TransactionService;
 import com.scbb.bank.loan.model.Loan;
 import com.scbb.bank.loan.model.enums.LoanReleaseType;
+import com.scbb.bank.loan.model.enums.LoanStatus;
 import com.scbb.bank.loan.payload.InstallmentScheduleRequest;
 import com.scbb.bank.loan.payload.InstallmentScheduleResponse;
 import com.scbb.bank.loan.payload.LoanStatusRequest;
 import com.scbb.bank.loan.payload.LoanStatusResponse;
+import com.scbb.bank.loan.payload.report.LoanReport;
 import com.scbb.bank.loan.repository.LoanRepository;
 import com.scbb.bank.person.model.User;
 import org.springframework.data.domain.Example;
@@ -56,7 +58,7 @@ public class LoanService implements AbstractService<Loan, Integer> {
 
 	@Transactional
 	public List<Loan> findAllByMemberId(Integer id) {
-		return loanRepository.findAllByMemberIdAndIsApprovedIsTrue(id);
+		return loanRepository.findAllByMemberIdAndLoanStatus(id, LoanStatus.Approved);
 	}
 
 	@Transactional
@@ -89,27 +91,24 @@ public class LoanService implements AbstractService<Loan, Integer> {
 		return loanRepository.findAll(example);
 	}
 
-
 	@Transactional
-	public Loan approve(Integer id) {
-		Loan loan = loanRepository.getOne(id);
-		loan.setIsApproved(true);
+	public Loan approve(Integer id, LoanReleaseType releaseType, String accountNumber, String token) {
+		Loan loan = loanRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Loan having id " + id + " cannot find"));
+
+		loan.setLoanStatus(LoanStatus.Approved);
 		loan.setGrantedDate(LocalDate.now());
 
+		// loan account creation
 		Account account = new Account(
 				loan.getLoanType().getName() + loan.getMember().getFullName(),
 				OperationType.Debit,
 				new AccountType(1),
 				new SubAccountType(3, "3"));
 		loan.setAccount(accountService.persist(account));
-		return loanRepository.save(loan);
-	}
 
-	@Transactional
-	public Loan release(Integer id, LoanReleaseType releaseType, String accountNumber, String token) {
+		// releasing loan
 		Transaction transaction = new Transaction(LocalDateTime.now(), EntryType.Transaction_Entry, new User(tokenProvider.getUserIdFromToken(token.substring(7))));
-		Loan loan = loanRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Loan having id " + id + " cannot find"));
 		Entry loanEntry = new Entry(new Account(loan.getAccount().getId()), loan.getRequestedAmount(), OperationType.Debit);
 		Entry entry2 = new Entry(loan.getRequestedAmount(), OperationType.Credit);
 		switch (releaseType) {
@@ -127,7 +126,14 @@ public class LoanService implements AbstractService<Loan, Integer> {
 		transaction.getEntryList().add(entry2);
 		transactionService.record(transaction);
 
-		loan.setIsReleased(true);
+		return loanRepository.save(loan);
+	}
+
+	@Transactional
+	public Loan reject(Integer id) {
+		Loan loan = loanRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Loan having id " + id + " cannot find"));
+		loan.setLoanStatus(LoanStatus.Rejected);
 		return loanRepository.save(loan);
 	}
 
@@ -220,12 +226,55 @@ public class LoanService implements AbstractService<Loan, Integer> {
 		return mul(div(monthlyInterest, new BigDecimal(String.valueOf(today.lengthOfMonth()))), new BigDecimal(numOfDays.toString()));
 	}
 
+	public LoanReport report(Integer id) {
+		Loan loan = loanRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Loan having id " + id + " cannot find"));
+		List<Transaction> transactionList = transactionService.findAllByEntryAccountNumber(loan.getAccount().getNumber());
+
+		LoanReport loanReport = new LoanReport();
+		loanReport.getPaidData().setLabel("Actual Payment");
+		loanReport.getEmiData().setLabel("Expected Payment");
+
+		BigDecimal paid = new BigDecimal("0");
+
+		for (int i = 1; i <= loan.getDuration(); i++) {
+			LocalDate date = loan.getGrantedDate().plusMonths(i);
+			if (LocalDate.now().isBefore(date)) break;
+			boolean isPaidForThisMonth = false;
+			for (Transaction transaction : transactionList) {
+				for (Entry entry : transaction.getEntryList()) {
+					if (entry.getAccount().getId() == 1 && entry.getOperationType() == OperationType.Debit) {
+						if (transaction.getDateTime().getYear() == date.getYear() && transaction.getDateTime().getMonth() == date.getMonth()) {
+							isPaidForThisMonth = true;
+							paid = add(paid, entry.getAmount());
+							loanReport.getPaidData().getData().add(paid);
+						}
+					}
+				}
+			}
+			if (!isPaidForThisMonth)
+				loanReport.getPaidData().getData().add(paid);
+		}
+
+		BigDecimal emi = new BigDecimal("0");
+		LocalDate grantedDate = loan.getGrantedDate();
+
+		for (int i = 1; i <= loan.getDuration(); i++) {
+			loanReport.getMonthList().add(grantedDate.plusMonths(i));
+			emi = add(emi, loan.getEquatedMonthlyValue());
+			loanReport.getEmiData().getData().add(emi);
+		}
+
+
+		return loanReport;
+	}
+
 	@Scheduled(cron = "0 30 3 * * ?")
 	public void interestEntry() {
 		if (LocalDate.now().getDayOfMonth() != LocalDate.now().lengthOfMonth())
 			return;
 		loanRepository.findAll().stream()
-				.filter(Loan::getIsApproved)
+				.filter(loan -> loan.getLoanStatus() == LoanStatus.Approved)
 				.forEach(loan -> {
 
 					LocalDate grantedDate = loan.getGrantedDate();
@@ -251,6 +300,5 @@ public class LoanService implements AbstractService<Loan, Integer> {
 					transactionService.record(transaction);
 				});
 	}
-
 
 }
