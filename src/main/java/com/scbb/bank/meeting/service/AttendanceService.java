@@ -52,7 +52,7 @@ public class AttendanceService implements AbstractService<Attendance, Integer> {
 
 	@Transactional
 	public void delete(Integer id) {
-		attendanceRepository.delete(attendanceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Resource having id " + id + " cannot find")));
+		attendanceRepository.delete(attendanceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Attendance having id " + id + " cannot find")));
 	}
 
 	@Transactional

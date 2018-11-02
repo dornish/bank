@@ -31,7 +31,7 @@ public class Account {
 	@Column(precision = 12, scale = 2)
 	private BigDecimal balance;
 
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern = "yyyy-MM-dd@HH:mm:ss")
 	private LocalDateTime lastUpdatedDateTime;
 
 	@Enumerated(EnumType.STRING)

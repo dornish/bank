@@ -2,6 +2,7 @@ package com.scbb.bank.area.service;
 
 import com.scbb.bank.area.model.Team;
 import com.scbb.bank.area.repository.TeamRepository;
+import com.scbb.bank.exception.ResourceCannotDeleteException;
 import com.scbb.bank.exception.ResourceNotFoundException;
 import com.scbb.bank.interfaces.AbstractService;
 import com.scbb.bank.ledger.service.AccountService;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -47,6 +49,8 @@ public class TeamService implements AbstractService<Team, Integer> {
 	public void delete(Integer id) {
 		Team team = teamRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Team having id" + id + " cannot find"));
+		if (team.getAccount().getBalance().compareTo(new BigDecimal("0")) != 0)
+			throw new ResourceCannotDeleteException("Team having id" + id + " cannot be deleted");
 		if (!team.getMemberList().isEmpty())
 			team.getMemberList().forEach(member -> member.setTeam(null));
 		teamRepository.delete(team);

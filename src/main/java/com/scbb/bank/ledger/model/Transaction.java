@@ -23,7 +23,7 @@ public class Transaction {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern = "yyyy-MM-dd@HH:mm:ss")
 	private LocalDateTime dateTime;
 
 	@Enumerated(EnumType.STRING)

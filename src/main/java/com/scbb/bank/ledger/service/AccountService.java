@@ -1,5 +1,6 @@
 package com.scbb.bank.ledger.service;
 
+import com.scbb.bank.exception.ResourceCannotDeleteException;
 import com.scbb.bank.exception.ResourceNotFoundException;
 import com.scbb.bank.interfaces.AbstractService;
 import com.scbb.bank.ledger.model.Account;
@@ -57,9 +58,9 @@ public class AccountService implements AbstractService<Account, Integer> {
 	public void delete(Integer id) {
 		Account account = accountRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Account having id" + id + " cannot find"));
-		if (account.getBalance().compareTo(new BigDecimal("0")) == 0) {
-			accountRepository.delete(account);
-		}
+		if (account.getBalance().compareTo(new BigDecimal("0")) != 0)
+			throw new ResourceCannotDeleteException("Account having id " + id + " cannot be deleted");
+		accountRepository.delete(account);
 	}
 
 	@Transactional

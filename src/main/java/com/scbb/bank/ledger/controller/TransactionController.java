@@ -4,10 +4,12 @@ import com.scbb.bank.interfaces.AbstractController;
 import com.scbb.bank.ledger.model.Account;
 import com.scbb.bank.ledger.model.Transaction;
 import com.scbb.bank.ledger.service.TransactionService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +35,12 @@ public class TransactionController implements AbstractController<Transaction, In
 	}
 
 	@GetMapping("entries/accounts/number/{number}")
-	public List<Transaction> findAllByEntryAccountNumber(@PathVariable String number) {
+	public List<Transaction> findAllByEntryAccountNumber(
+			@PathVariable String number,
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @RequestParam(required = false) LocalDateTime date1,
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @RequestParam(required = false) LocalDateTime date2) {
+		if (date1 != null && date2 != null)
+			return modifyResources(transactionService.findAllByEntryAccountNumber(number, date1, date2));
 		return modifyResources(transactionService.findAllByEntryAccountNumber(number));
 	}
 

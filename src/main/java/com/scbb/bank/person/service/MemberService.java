@@ -1,5 +1,6 @@
 package com.scbb.bank.person.service;
 
+import com.scbb.bank.exception.ResourceCannotDeleteException;
 import com.scbb.bank.exception.ResourceNotFoundException;
 import com.scbb.bank.interfaces.AbstractService;
 import com.scbb.bank.ledger.service.AccountService;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -56,7 +58,8 @@ public class MemberService implements AbstractService<Member, Integer> {
 	public void delete(Integer id) {
 		Member member = memberRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Member not found with having id: " + id));
-
+		if (member.getShareAccount().getBalance().compareTo(new BigDecimal("0")) != 0)
+			throw new ResourceCannotDeleteException("Member having id " + id + " cannot be deleted");
 		if (member.getBoardMember() != null)
 			member.getBoardMember().setMember(null);
 		memberRepository.delete(member);

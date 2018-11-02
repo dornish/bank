@@ -35,6 +35,14 @@ public class TransactionService {
 		return transactionRepository.findAll();
 	}
 
+	public List<Transaction> findAllByEntryAccountNumber(String number) {
+		return transactionRepository.findAllByEntryListAccountNumberOrderByDateTimeDesc(number);
+	}
+
+	public List<Transaction> findAllByEntryAccountNumber(String number, LocalDateTime date1, LocalDateTime date2) {
+		return transactionRepository.findAllByEntryListAccountNumberAndDateTimeBetweenOrderByDateTimeDesc(number, date1, date2);
+	}
+
 	public Transaction findById(Integer id) {
 		return transactionRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("transaction having id " + id + "cannot find"));
@@ -82,9 +90,5 @@ public class TransactionService {
 					newTransaction.getEntryList().add(newEntry);
 				});
 		return transactionRepository.save(newTransaction);
-	}
-
-	public List<Transaction> findAllByEntryAccountNumber(String number) {
-		return transactionRepository.findAllByEntryListAccountNumber(number);
 	}
 }

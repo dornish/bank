@@ -20,6 +20,11 @@ public class ResourceExceptionHandler {
 	}
 
 	@ExceptionHandler
+	public ResponseEntity<String> usernameNotFound(ResourceCannotDeleteException e) {
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+	}
+
+	@ExceptionHandler
 	public ResponseEntity<String> internalServerError(Exception e) {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 	}
