@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="Blank_A4" pageWidth="298" pageHeight="298" columnWidth="270" leftMargin="14" rightMargin="14"
+              topMargin="14" bottomMargin="14" uuid="5e04341a-5bdb-4be1-ac70-38e2588c7aef">
+    <property name="com.jaspersoft.studio.unit." value="cm"/>
+    <property name="com.jaspersoft.studio.unit.pageHeight" value="cm"/>
+    <property name="com.jaspersoft.studio.unit.pageWidth" value="cm"/>
+    <property name="com.jaspersoft.studio.unit.topMargin" value="cm"/>
+    <property name="com.jaspersoft.studio.unit.bottomMargin" value="cm"/>
+    <property name="com.jaspersoft.studio.unit.leftMargin" value="cm"/>
+    <property name="com.jaspersoft.studio.unit.rightMargin" value="cm"/>
+    <property name="com.jaspersoft.studio.unit.columnWidth" value="cm"/>
+    <property name="com.jaspersoft.studio.unit.columnSpacing" value="cm"/>
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+    <parameter name="operationType" class="java.lang.String"/>
+    <parameter name="transId" class="java.lang.Integer"/>
+    <parameter name="generatedUser" class="java.lang.String"/>
+    <parameter name="transactionDateTime" class="java.lang.String"/>
+    <parameter name="transactionUser" class="java.lang.String"/>
+    <parameter name="member" class="java.lang.String"/>
+    <parameter name="balance" class="java.math.BigDecimal"/>
+    <parameter name="amount" class="java.math.BigDecimal"/>
+    <parameter name="accountNumber" class="java.lang.String"/>
+    <queryString>
+        <![CDATA[]]>
+    </queryString>
+    <variable name="now" class="java.lang.String">
+        <variableExpression>
+            <![CDATA[java.time.LocalDate.now().toString() + " @ " + String.valueOf(java.time.LocalTime.now().getHour()) + ":" + String.valueOf(java.time.LocalTime.now().getHour())]]></variableExpression>
+    </variable>
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+    <detail>
+        <band height="270" splitType="Stretch">
+            <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+            <staticText>
+                <reportElement x="0" y="0" width="270" height="50" uuid="4df6651c-d628-4e85-8c6c-daff86b639b8"/>
+                <textElement textAlignment="Center" verticalAlignment="Top">
+                    <font size="16" isBold="true" isUnderline="true"/>
+                </textElement>
+                <text><![CDATA[Samurdhi Community Based Bank
+Kottawa]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="0" y="50" width="270" height="39" uuid="904dbf89-e1cc-4052-8295-a1c2c5b850da"/>
+                <textElement textAlignment="Right">
+                    <font size="13" isBold="false" isItalic="false" isStrikeThrough="false"/>
+                </textElement>
+                <text><![CDATA[121/1, Hospital Road, Malapalla, Pannipitiya
+0112 - 898 897]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="0" y="89" width="100" height="20" uuid="144f22a4-584b-4732-b701-a94b108a29ff"/>
+                <textElement textAlignment="Right" verticalAlignment="Bottom">
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Cash]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="100" y="89" width="170" height="20" uuid="ab87103b-ed0d-42cc-b00a-e737a32dcb95"/>
+                <textElement verticalAlignment="Bottom">
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[" " + $P{operationType} + " - " + $P{transId}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="0" y="117" width="60" height="18" uuid="4b102102-d284-43d7-8c0f-94718cbcef9b"/>
+                <text><![CDATA[Acc. no.]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="0" y="135" width="60" height="18" uuid="bff1420f-4b13-4a7f-b8e0-c95b584885c3"/>
+                <text><![CDATA[Member]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="0" y="153" width="60" height="18" uuid="9726bbe5-d102-40d2-b9c7-b803dcd26d56"/>
+                <text><![CDATA[Amount]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="0" y="171" width="60" height="18" uuid="a425f2b5-4790-452a-96b4-a00ca889fd72"/>
+                <text><![CDATA[Balance]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="0" y="189" width="60" height="18" uuid="a3a1183e-2c31-4a48-a8d7-e5fb8b0ac72c"/>
+                <text><![CDATA[Entered by]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="80" y="117" width="190" height="18" uuid="5ad8353d-41df-4bf0-9339-550356181d7a"/>
+                <textFieldExpression><![CDATA[$P{accountNumber}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="80" y="135" width="190" height="18" uuid="1a1a0863-6076-4e9b-95ef-82679d7b15f6"/>
+                <textFieldExpression><![CDATA[$P{member}]]></textFieldExpression>
+            </textField>
+            <textField pattern="#,##0.00#">
+                <reportElement x="80" y="153" width="190" height="18" uuid="459bdc29-3b8c-4bfb-ae76-a49804b35880"/>
+                <textFieldExpression><![CDATA[$P{amount}]]></textFieldExpression>
+            </textField>
+            <textField pattern="#,##0.00#">
+                <reportElement x="80" y="171" width="190" height="18" uuid="676635e1-1113-4317-a187-ce28a411fb4d"/>
+                <textFieldExpression><![CDATA[$P{balance}]]></textFieldExpression>
+            </textField>
+            <textField pattern="yyyy-MM-dd @ HH:mm:ss">
+                <reportElement x="80" y="189" width="190" height="18" uuid="56c3a9b3-3130-426f-bae1-07b3e786dab6"/>
+                <textFieldExpression><![CDATA[$P{transactionUser}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="60" y="117" width="20" height="18" uuid="d6056d43-564d-4484-b030-a9b97587bd96"/>
+                <textElement textAlignment="Center"/>
+                <text><![CDATA[:]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="60" y="135" width="20" height="18" uuid="c311b431-94af-480d-bfc6-c083cb6d3cc5"/>
+                <textElement textAlignment="Center"/>
+                <text><![CDATA[:]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="60" y="153" width="20" height="18" uuid="b2102e0e-f6f8-48d9-9831-a5394fa653cd"/>
+                <textElement textAlignment="Center"/>
+                <text><![CDATA[:]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="60" y="171" width="20" height="18" uuid="8f0f7787-3e74-457a-bcfa-e865912852b2"/>
+                <textElement textAlignment="Center"/>
+                <text><![CDATA[:]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="60" y="189" width="20" height="18" uuid="03b49334-218c-4444-8718-7dbe3444db8a"/>
+                <textElement textAlignment="Center"/>
+                <text><![CDATA[:]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="70" y="252" width="80" height="18" uuid="37f72730-c8b7-49d2-8229-e26a423e915f"/>
+                <text><![CDATA[Generated date]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="150" y="252" width="20" height="18" uuid="2a152a25-9238-4489-a388-cdd0b5f65b7a"/>
+                <textElement textAlignment="Center"/>
+                <text><![CDATA[:]]></text>
+            </staticText>
+            <textField pattern="yyyy-MM-dd @ HH:mm:ss">
+                <reportElement x="170" y="252" width="100" height="18" uuid="46ab0aca-2012-4bf7-b56e-9de3e50e6089"/>
+                <textFieldExpression><![CDATA[$V{now}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="0" y="207" width="60" height="18" uuid="5dae5766-89b7-41e7-ac19-0af2590f8174"/>
+                <text><![CDATA[Entered date]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="60" y="207" width="20" height="18" uuid="6f5d04ff-78d4-4d91-bf7b-7dc07763feb5"/>
+                <textElement textAlignment="Center"/>
+                <text><![CDATA[:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="80" y="207" width="190" height="18" uuid="77320a93-edfd-419c-8542-13269d5ddc7b"/>
+                <textFieldExpression><![CDATA[$P{transactionDateTime}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="70" y="234" width="80" height="18" uuid="da67d3af-2ca8-446e-9c5a-ccf54f2ebdc6"/>
+                <text><![CDATA[Generated by]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="150" y="234" width="20" height="18" uuid="8bf79d29-ed07-4755-95be-d99ca72661fe"/>
+                <textElement textAlignment="Center"/>
+                <text><![CDATA[:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="170" y="234" width="100" height="18" uuid="bc480d1f-c3a6-4f0b-b435-c6ea5906601a"/>
+                <textFieldExpression><![CDATA[$P{generatedUser}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+</jasperReport>

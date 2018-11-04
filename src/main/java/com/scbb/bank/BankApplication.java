@@ -13,7 +13,8 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
-import java.time.Month;
+import java.time.LocalTime;
+import java.util.Date;
 import java.util.TimeZone;
 
 @SpringBootApplication
@@ -40,10 +41,10 @@ public class BankApplication {
 	@Transactional
 	public CommandLineRunner run(RestTemplate restTemplate) {
 		return args -> {
-			LocalDate grantedDate = LocalDate.of(2018, Month.APRIL, 20);
-			System.out.println(grantedDate.lengthOfMonth());
-			LocalDate today = LocalDate.now();
-			//System.out.println(grantedDate.until(today, ChronoUnit.DAYS));
+			String s = LocalDate.now().toString() + " at " + String.valueOf(LocalTime.now().getHour()) + ":" + String.valueOf(LocalTime.now().getHour());
+			System.out.println(s);
+			Date date = new Date();
+			System.out.println(date);
 		};
 	}
 
