@@ -23,6 +23,8 @@ public class Transaction {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	private String narration;
+
 	@JsonFormat(pattern = "yyyy-MM-dd@HH:mm:ss")
 	private LocalDateTime dateTime;
 

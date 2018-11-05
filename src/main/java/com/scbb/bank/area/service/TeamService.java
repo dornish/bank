@@ -50,7 +50,7 @@ public class TeamService implements AbstractService<Team, Integer> {
 		Team team = teamRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Team having id" + id + " cannot find"));
 		if (team.getAccount().getBalance().compareTo(new BigDecimal("0")) != 0)
-			throw new ResourceCannotDeleteException("Team having id" + id + " cannot be deleted");
+			throw new ResourceCannotDeleteException("Team having id " + id + " cannot be deleted");
 		if (!team.getMemberList().isEmpty())
 			team.getMemberList().forEach(member -> member.setTeam(null));
 		teamRepository.delete(team);

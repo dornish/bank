@@ -37,10 +37,10 @@ public class TransactionController implements AbstractController<Transaction, In
 	@GetMapping("entries/accounts/number/{number}")
 	public List<Transaction> findAllByEntryAccountNumber(
 			@PathVariable String number,
-			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @RequestParam(required = false) LocalDateTime date1,
-			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @RequestParam(required = false) LocalDateTime date2) {
-		if (date1 != null && date2 != null)
-			return modifyResources(transactionService.findAllByEntryAccountNumber(number, date1, date2));
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @RequestParam(required = false) LocalDateTime fromDate,
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @RequestParam(required = false) LocalDateTime toDate) {
+		if (fromDate != null && toDate != null)
+			return modifyResources(transactionService.findAllByEntryAccountNumber(number, fromDate, toDate));
 		return modifyResources(transactionService.findAllByEntryAccountNumber(number));
 	}
 

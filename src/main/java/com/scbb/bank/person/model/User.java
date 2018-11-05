@@ -42,6 +42,10 @@ public class User implements UserDetails {
 		this.id = id;
 	}
 
+	public User(String username) {
+		this.username = username;
+	}
+
 	@Override
 	public Collection<Role> getAuthorities() {
 		return authorities;

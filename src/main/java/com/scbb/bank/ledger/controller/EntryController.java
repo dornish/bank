@@ -1,20 +1,22 @@
 package com.scbb.bank.ledger.controller;
 
 
-import com.scbb.bank.interfaces.AbstractController;
 import com.scbb.bank.ledger.model.Entry;
 import com.scbb.bank.ledger.service.EntryService;
+import com.scbb.bank.person.model.User;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
 @RequestMapping("entries")
-public class EntryController implements AbstractController<Entry, Integer> {
+public class EntryController {
 
 
 	private EntryService entryService;
@@ -24,8 +26,11 @@ public class EntryController implements AbstractController<Entry, Integer> {
 	}
 
 	@GetMapping
-	public List<Entry> findAll() {
-		return modifyResources(entryService.findAll());
+	public List<Entry> findAll(
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @RequestParam(required = false) LocalDateTime fromDate,
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @RequestParam(required = false) LocalDateTime toDate
+	) {
+		return modifyResources(entryService.findAll(fromDate, toDate));
 	}
 
 	@GetMapping("account/number/{number}")
@@ -49,11 +54,16 @@ public class EntryController implements AbstractController<Entry, Integer> {
 	}
 
 	@PutMapping("search")
-	public List<Entry> search(Entry entry) {
-		return modifyResources(entryService.search(entry));
+	public List<Entry> search(
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @RequestParam(required = false) LocalDateTime fromDate,
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @RequestParam(required = false) LocalDateTime toDate,
+			@RequestBody Entry entry
+	) {
+		System.out.println("from " + fromDate);
+		System.out.println("to " + toDate);
+		return modifyResources(entryService.search(entry, fromDate, toDate));
 	}
 
-	@Override
 	public Entry modifyResource(Entry entry) {
 		if (entry.getAccount() != null) {
 			entry.getAccount().setTeam(null);
@@ -65,12 +75,13 @@ public class EntryController implements AbstractController<Entry, Integer> {
 		}
 		if (entry.getTransaction() != null) {
 			entry.getTransaction().setEntryList(null);
+			String username = entry.getTransaction().getUser().getUsername();
 			entry.getTransaction().setUser(null);
+			entry.getTransaction().setUser(new User(username));
 		}
 		return entry;
 	}
 
-	@Override
 	public List<Entry> modifyResources(List<Entry> entries) {
 		return entries.stream()
 				.map(this::modifyResource)

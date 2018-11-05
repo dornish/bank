@@ -25,4 +25,11 @@ public class CashierReportController {
 	                    HttpServletResponse response) {
 		cashierReportService.deposit(id, token, operationType, response);
 	}
+
+	@GetMapping("shares/transaction/{id}")
+	public void share(@PathVariable Integer id,
+	                  @RequestHeader("Authorization") String token,
+	                  HttpServletResponse response) {
+		cashierReportService.share(id, token, response);
+	}
 }

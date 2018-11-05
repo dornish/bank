@@ -2,7 +2,6 @@ package com.scbb.bank.ledger.service;
 
 
 import com.scbb.bank.exception.ResourceNotFoundException;
-import com.scbb.bank.interfaces.AbstractService;
 import com.scbb.bank.ledger.model.Entry;
 import com.scbb.bank.ledger.repository.EntryRepository;
 import org.springframework.data.domain.Example;
@@ -10,10 +9,12 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-public class EntryService implements AbstractService<Entry, Integer> {
+public class EntryService {
 
 	private EntryRepository entryRepository;
 
@@ -24,7 +25,10 @@ public class EntryService implements AbstractService<Entry, Integer> {
 
 
 	@Transactional
-	public List<Entry> findAll() {
+	public List<Entry> findAll(LocalDateTime fromDate, LocalDateTime toDate) {
+		if (fromDate != null && toDate != null) {
+			return entryRepository.findAllByTransactionDateTimeBetween(fromDate, toDate);
+		}
 		return entryRepository.findAll();
 	}
 
@@ -49,11 +53,19 @@ public class EntryService implements AbstractService<Entry, Integer> {
 	}
 
 	@Transactional
-	public List<Entry> search(Entry entry) {
+	public List<Entry> search(Entry entry, LocalDateTime fromDate, LocalDateTime toDate) {
 		ExampleMatcher matcher = ExampleMatcher
 				.matching()
 				.withIgnoreCase()
 				.withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
-		return entryRepository.findAll(Example.of(entry, matcher));
+		List<Entry> entryList = entryRepository.findAll(Example.of(entry, matcher));
+		if (fromDate != null && toDate != null)
+			return entryList.stream()
+					.peek(entry1 -> System.out.println("entering to loop " + entry1.getTransaction().getId() + " --> " + entry1.getTransaction().getDateTime()))
+					.filter(entry1 -> entry1.getTransaction().getDateTime().isBefore(toDate))
+					.filter(entry1 -> entry1.getTransaction().getDateTime().isAfter(fromDate))
+					.peek(entry1 -> System.out.println("filtered " + entry1.getTransaction().getId() + " --> " + entry1.getTransaction().getDateTime()))
+					.collect(Collectors.toList());
+		return entryList;
 	}
 }

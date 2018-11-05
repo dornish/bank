@@ -41,7 +41,7 @@ public class BankApplication {
 	@Transactional
 	public CommandLineRunner run(RestTemplate restTemplate) {
 		return args -> {
-			String s = LocalDate.now().toString() + " at " + String.valueOf(LocalTime.now().getHour()) + ":" + String.valueOf(LocalTime.now().getHour());
+			String s = LocalDate.now().toString() + " at " + String.valueOf(LocalTime.now().getHour()) + ":" + String.valueOf(LocalTime.now().getMinute());
 			System.out.println(s);
 			Date date = new Date();
 			System.out.println(date);

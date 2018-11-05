@@ -10,5 +10,5 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
 
 	List<Transaction> findAllByEntryListAccountNumberOrderByDateTimeDesc(String number);
 
-	List<Transaction> findAllByEntryListAccountNumberAndDateTimeBetweenOrderByDateTimeDesc(String number, LocalDateTime date1, LocalDateTime date2);
+	List<Transaction> findAllByEntryListAccountNumberAndDateTimeBetweenOrderByDateTimeDesc(String number, LocalDateTime fromDate, LocalDateTime toDate);
 }

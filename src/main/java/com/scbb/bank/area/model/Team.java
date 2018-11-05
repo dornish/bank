@@ -27,7 +27,7 @@ public class Team {
 	@ManyToOne
 	private Society society;
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.REMOVE)
 	private Account account;
 
 	@Override

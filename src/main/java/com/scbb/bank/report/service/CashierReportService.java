@@ -87,4 +87,53 @@ public class CashierReportService {
 		}
 
 	}
+
+	public void share(Integer id, String token, HttpServletResponse response) {
+		String substring = token.substring(7);
+		System.out.println(substring);
+		User user = userService.findById(tokenProvider.getUserIdFromToken(substring));
+		try {
+
+			InputStream stream = this.getClass().getResourceAsStream("/reports/share.jrxml");
+			JasperDesign jasperDesign = JRXmlLoader.load(stream);
+			JasperReport report = JasperCompileManager.compileReport(jasperDesign);
+
+			Map<String, Object> map = new HashMap<>();
+			Transaction transaction = transactionService.findById(id);
+			String member = "";
+			BigDecimal balance = new BigDecimal("0");
+			String accountNumber = "";
+			for (Entry entry : transaction.getEntryList()) {
+				if (entry.getOperationType() == OperationType.Credit) {
+					member = entry.getAccount().getShareHolder().getFullName();
+					balance = entry.getAccount().getBalance();
+					accountNumber = entry.getAccount().getNumber();
+				}
+			}
+			LocalDate date = transaction.getDateTime().toLocalDate();
+			LocalTime time = transaction.getDateTime().toLocalTime();
+			String transactionDateTime = date + " @ " + String.valueOf(time.getHour()) + ":" + String.valueOf(time.getSecond());
+
+			map.put("generatedUser", user.getUsername());
+			map.put("transactionDateTime", transactionDateTime);
+			map.put("transactionUser", transaction.getUser().getUsername());
+			map.put("member", member);
+			map.put("balance", balance);
+			map.put("amount", transaction.getEntryList().get(0).getAmount());
+			map.put("numOfShares", transaction.getEntryList().get(0).getAmount().divide(new BigDecimal("500"), 0, BigDecimal.ROUND_FLOOR).toString());
+			map.put("transId", id);
+			map.put("accountNumber", accountNumber);
+
+			JasperPrint jasperPrint = JasperFillManager.fillReport(report, map, new JREmptyDataSource(1));
+			response.setContentType("application/x-pdf");
+			response.setHeader("Content-Disposition", "inline; filename=share.pdf");
+
+			OutputStream outputStream = response.getOutputStream();
+			JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
+
+		} catch (JRException | IOException e) {
+			e.printStackTrace();
+		}
+
+	}
 }

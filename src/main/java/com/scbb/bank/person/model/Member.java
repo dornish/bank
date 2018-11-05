@@ -47,7 +47,7 @@ public class Member {
 	@ManyToOne
 	private Team team;
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.REMOVE)
 	private Account shareAccount;
 
 	@OneToMany(mappedBy = "member")

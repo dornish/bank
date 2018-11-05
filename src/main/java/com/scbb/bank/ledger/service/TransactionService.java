@@ -39,8 +39,8 @@ public class TransactionService {
 		return transactionRepository.findAllByEntryListAccountNumberOrderByDateTimeDesc(number);
 	}
 
-	public List<Transaction> findAllByEntryAccountNumber(String number, LocalDateTime date1, LocalDateTime date2) {
-		return transactionRepository.findAllByEntryListAccountNumberAndDateTimeBetweenOrderByDateTimeDesc(number, date1, date2);
+	public List<Transaction> findAllByEntryAccountNumber(String number, LocalDateTime fromDate, LocalDateTime toDate) {
+		return transactionRepository.findAllByEntryListAccountNumberAndDateTimeBetweenOrderByDateTimeDesc(number, fromDate, toDate);
 	}
 
 	public Transaction findById(Integer id) {
