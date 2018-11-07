@@ -32,6 +32,12 @@ public class AccountService implements AbstractService<Account, Integer> {
 	}
 
 	@Transactional
+	public List<Account> findAllHavingSavings() {
+		return accountRepository.findAllBySavingsIsNotNull();
+	}
+
+
+	@Transactional
 	public Account findById(Integer id) {
 		return accountRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Account having id " + id + " cannot find"));

@@ -28,14 +28,23 @@ public class EntryController {
 	@GetMapping
 	public List<Entry> findAll(
 			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @RequestParam(required = false) LocalDateTime fromDate,
-			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @RequestParam(required = false) LocalDateTime toDate
-	) {
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @RequestParam(required = false) LocalDateTime toDate)
+	{
 		return modifyResources(entryService.findAll(fromDate, toDate));
 	}
 
 	@GetMapping("account/number/{number}")
-	public List<Entry> findTop3ByAccountNumber(@PathVariable String number) {
-		return modifyResources(entryService.findTop3ByAccountNumber(number));
+	public List<Entry> findAllByAccountNumber(
+			@PathVariable String number,
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @RequestParam(required = false) LocalDateTime fromDate,
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @RequestParam(required = false) LocalDateTime toDate)
+	{
+		return modifyResources(entryService.findAllByAccountNumber(number, fromDate, toDate));
+	}
+
+	@GetMapping("top5/account/number/{number}")
+	public List<Entry> findTop5ByAccountNumber(@PathVariable String number) {
+		return modifyResources(entryService.findTop5ByAccountNumber(number));
 	}
 
 	@GetMapping("{id}")

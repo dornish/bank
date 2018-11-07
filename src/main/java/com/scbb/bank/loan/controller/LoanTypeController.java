@@ -1,18 +1,18 @@
 package com.scbb.bank.loan.controller;
 
 
-import com.scbb.bank.interfaces.AbstractController;
 import com.scbb.bank.loan.model.LoanType;
 import com.scbb.bank.loan.service.LoanTypeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
 @CrossOrigin
 @RequestMapping("loanTypes")
-public class LoanTypeController implements AbstractController<LoanType, Integer> {
+public class LoanTypeController{
 
 	private LoanTypeService loanTypeService;
 
@@ -44,16 +44,21 @@ public class LoanTypeController implements AbstractController<LoanType, Integer>
 	}
 
 	@PutMapping("search")
-	public List<LoanType> search(@RequestBody LoanType loanType) {
-		return loanTypeService.search(loanType);
+	public List<LoanType> search(
+			@RequestBody LoanType loanType,
+			@RequestParam(required = false) BigDecimal amount,
+			@RequestParam(required = false) Integer period
+	)
+	{
+		return loanTypeService.search(loanType, amount, period);
 	}
 
-	@Override
+
 	public LoanType modifyResource(LoanType loanType) {
 		return null;
 	}
 
-	@Override
+
 	public List<LoanType> modifyResources(List<LoanType> loanTypes) {
 		return null;
 	}

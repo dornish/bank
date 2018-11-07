@@ -10,5 +10,9 @@ public interface EntryRepository extends JpaRepository<Entry, Integer> {
 
 	List<Entry> findTop3ByAccountNumberOrderByTransactionDateTimeDesc(String number);
 
+	List<Entry> findAllByAccountNumberAndTransactionDateTimeBetweenOrderByTransactionDateTimeDesc(String number, LocalDateTime fromDate, LocalDateTime toDate);
+
+	List<Entry> findAllByAccountNumberOrderByTransactionDateTimeDesc(String number);
+
 	List<Entry> findAllByTransactionDateTimeBetween(LocalDateTime fromDate, LocalDateTime toDate);
 }

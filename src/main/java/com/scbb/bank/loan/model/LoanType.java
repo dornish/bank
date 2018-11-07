@@ -19,4 +19,14 @@ public class LoanType {
 
 	@Column(scale = 2, precision = 4)
 	private BigDecimal interestRate;
+
+	private Integer minPeriod;
+
+	private Integer maxPeriod;
+
+	@Column(scale = 2, precision = 12)
+	private BigDecimal minAmount;
+
+	@Column(scale = 2, precision = 12)
+	private BigDecimal maxAmount;
 }

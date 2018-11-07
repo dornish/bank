@@ -26,6 +26,11 @@ public class AccountController implements AbstractController<Account, Integer> {
 		return modifyResources(accountService.findAll());
 	}
 
+	@GetMapping("savings")
+	public List<Account> findAllHavingSavings() {
+		return modifyResources(accountService.findAllHavingSavings());
+	}
+
 	@GetMapping("{id}")
 	public Account findById(@PathVariable Integer id) {
 		return modifyResource(accountService.findById(id));

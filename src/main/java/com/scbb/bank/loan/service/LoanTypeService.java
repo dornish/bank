@@ -8,11 +8,15 @@ import com.scbb.bank.loan.repository.LoanTypeRepository;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
-public class LoanTypeService implements AbstractService<LoanType, Integer> {
+public class LoanTypeService {
 
 	private LoanTypeRepository loanTypeRepository;
 
@@ -20,23 +24,23 @@ public class LoanTypeService implements AbstractService<LoanType, Integer> {
 		this.loanTypeRepository = loanTypeRepository;
 	}
 
-	@Override
+	@Transactional
 	public List<LoanType> findAll() {
 		return loanTypeRepository.findAll();
 	}
 
-	@Override
+	@Transactional
 	public LoanType findById(Integer id) {
 		return loanTypeRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Loan type having id " + id + " cannot find"));
 	}
 
-	@Override
+	@Transactional
 	public LoanType persist(LoanType loanType) {
 		return loanTypeRepository.save(loanType);
 	}
 
-	@Override
+	@Transactional
 	public void delete(Integer id) {
 		loanTypeRepository.delete(
 				loanTypeRepository.findById(id)
@@ -44,13 +48,18 @@ public class LoanTypeService implements AbstractService<LoanType, Integer> {
 		);
 	}
 
-	@Override
-	public List<LoanType> search(LoanType loanType) {
+	public List<LoanType> search(LoanType loanType, BigDecimal amount, Integer period) {
 		ExampleMatcher matcher = ExampleMatcher
 				.matching()
 				.withIgnoreCase()
 				.withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
 		Example<LoanType> example = Example.of(loanType, matcher);
-		return loanTypeRepository.findAll(example);
+		List<LoanType> loanTypeList = loanTypeRepository.findAll(example);
+		return loanTypeList.stream()
+				.filter(loanType1 -> amount == null || loanType1.getMinAmount().compareTo(amount) <= 0)
+				.filter(loanType1 -> amount == null || loanType1.getMaxAmount().compareTo(amount) >= 0)
+				.filter(loanType1 -> period == null || loanType1.getMinPeriod().compareTo(period) <= 0)
+				.filter(loanType1 -> period == null || loanType1.getMaxPeriod().compareTo(period) >= 0)
+				.collect(Collectors.toList());
 	}
 }

@@ -26,14 +26,20 @@ public class EntryService {
 
 	@Transactional
 	public List<Entry> findAll(LocalDateTime fromDate, LocalDateTime toDate) {
-		if (fromDate != null && toDate != null) {
+		if (fromDate != null && toDate != null)
 			return entryRepository.findAllByTransactionDateTimeBetween(fromDate, toDate);
-		}
 		return entryRepository.findAll();
 	}
 
 	@Transactional
-	public List<Entry> findTop3ByAccountNumber(String number) {
+	public List<Entry> findAllByAccountNumber(String number, LocalDateTime fromDate, LocalDateTime toDate) {
+		if (fromDate != null && toDate != null)
+			return entryRepository.findAllByAccountNumberAndTransactionDateTimeBetweenOrderByTransactionDateTimeDesc(number, fromDate, toDate);
+		return entryRepository.findAllByAccountNumberOrderByTransactionDateTimeDesc(number);
+	}
+
+	@Transactional
+	public List<Entry> findTop5ByAccountNumber(String number) {
 		return entryRepository.findTop3ByAccountNumberOrderByTransactionDateTimeDesc(number);
 	}
 

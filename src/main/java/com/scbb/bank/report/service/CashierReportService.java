@@ -52,7 +52,7 @@ public class CashierReportService {
 			BigDecimal balance = new BigDecimal("0");
 			String accountNumber = "";
 			for (Entry entry : transaction.getEntryList()) {
-				if (entry.getOperationType() == OperationType.Credit) {
+				if (!entry.getAccount().getId().equals(1)) {
 					member = entry.getAccount().getSavings().getMember().getFullName();
 					balance = entry.getAccount().getBalance();
 					accountNumber = entry.getAccount().getNumber();
