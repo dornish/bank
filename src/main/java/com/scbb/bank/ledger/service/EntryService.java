@@ -60,6 +60,7 @@ public class EntryService {
 
 	@Transactional
 	public List<Entry> search(Entry entry, LocalDateTime fromDate, LocalDateTime toDate) {
+		System.out.println("search called");
 		ExampleMatcher matcher = ExampleMatcher
 				.matching()
 				.withIgnoreCase()
@@ -67,10 +68,8 @@ public class EntryService {
 		List<Entry> entryList = entryRepository.findAll(Example.of(entry, matcher));
 		if (fromDate != null && toDate != null)
 			return entryList.stream()
-					.peek(entry1 -> System.out.println("entering to loop " + entry1.getTransaction().getId() + " --> " + entry1.getTransaction().getDateTime()))
 					.filter(entry1 -> entry1.getTransaction().getDateTime().isBefore(toDate))
 					.filter(entry1 -> entry1.getTransaction().getDateTime().isAfter(fromDate))
-					.peek(entry1 -> System.out.println("filtered " + entry1.getTransaction().getId() + " --> " + entry1.getTransaction().getDateTime()))
 					.collect(Collectors.toList());
 		return entryList;
 	}

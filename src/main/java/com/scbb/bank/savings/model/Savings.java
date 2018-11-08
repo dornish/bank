@@ -26,7 +26,7 @@ public class Savings {
 	@ManyToOne
 	private SavingType savingType;
 
-	@OneToOne(cascade = CascadeType.PERSIST)
+	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	private Account account;
 
 	@ManyToOne

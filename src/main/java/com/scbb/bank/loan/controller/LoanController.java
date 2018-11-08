@@ -52,6 +52,11 @@ public class LoanController implements AbstractController<Loan, Integer> {
 		return loanService.calculateArrears(id);
 	}
 
+	@GetMapping("calcRemaining/{id}")
+	public BigDecimal calculateRemaining(@PathVariable Integer id) {
+		return loanService.calculateRemainingAmount(id);
+	}
+
 	@GetMapping("report/{id}")
 	public LoanReport report(@PathVariable Integer id) {
 		return loanService.report(id);

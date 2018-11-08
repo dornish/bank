@@ -70,6 +70,7 @@ public class LoanService implements AbstractService<Loan, Integer> {
 	@Transactional
 	public Loan persist(Loan loan) {
 		loan.setRequestedDate(LocalDate.now());
+		loan.setLoanStatus(LoanStatus.Pending);
 		return loanRepository.save(loan);
 	}
 
@@ -153,8 +154,7 @@ public class LoanService implements AbstractService<Loan, Integer> {
 			return new BigDecimal(loan.getEquatedMonthlyValue().toString());
 
 		BigDecimal paidAmount = new BigDecimal("0");
-		List<Transaction> transactionList = transactionService.findAllByEntryAccountNumber(loan.getAccount().getNumber());
-		for (Transaction transaction : transactionList) {
+		for (Transaction transaction : transactionService.findAllByEntryAccountNumber(loan.getAccount().getNumber())) {
 			for (Entry entry : transaction.getEntryList()) {
 				if (entry.getAccount().getId().equals(1) && entry.getOperationType() == OperationType.Debit) { // checking cash credited entry
 					paidAmount = add(paidAmount, entry.getAmount());
@@ -172,7 +172,7 @@ public class LoanService implements AbstractService<Loan, Integer> {
 		for (Integer value = 1; value <= request.getDuration(); value++) {
 			InstallmentScheduleResponse response = new InstallmentScheduleResponse();
 			response.setTotal(emi);
-			response.setDate(LocalDate.now().plusMonths(value - 1));
+			response.setDate(LocalDate.now().plusMonths(value));
 			if (value.equals(1)) {
 				BigDecimal interest = mul(request.getAmount(), getMonthlyInterestRate(request.getInterestRate()));
 				response.setInterest(interest);
@@ -198,6 +198,19 @@ public class LoanService implements AbstractService<Loan, Integer> {
 			list.add(response);
 		}
 		return list;
+	}
+
+	@Transactional
+	public BigDecimal calculateRemainingAmount(Integer id) {
+		Loan loan = loanRepository.getOne(id);
+		BigDecimal total = mul(loan.getEquatedMonthlyValue(), new BigDecimal(loan.getDuration().toString()));
+		for (Transaction transaction : transactionService.findAllByEntryAccountNumber(loan.getAccount().getNumber())) {
+			for (Entry entry : transaction.getEntryList()) {
+				if (entry.getAccount().getId() == 1)
+					total = sub(total, entry.getAmount());
+			}
+		}
+		return total;
 	}
 
 	@Transactional
