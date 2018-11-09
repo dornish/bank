@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,7 +18,10 @@ public class SavingType {
 
 	private String name;
 
-	@Column(precision = 5, scale = 3)
+	@Column(precision = 5, scale = 2)
 	private BigDecimal interestRate;
+
+	@OneToMany(mappedBy = "savingType")
+	private List<Savings> savingsList;
 
 }

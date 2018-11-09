@@ -10,6 +10,7 @@ import com.scbb.bank.ledger.repository.AccountRepository;
 import com.scbb.bank.ledger.service.AccountService;
 import com.scbb.bank.ledger.service.TransactionService;
 import com.scbb.bank.loan.model.Loan;
+import com.scbb.bank.loan.model.LoanType;
 import com.scbb.bank.loan.model.enums.LoanReleaseType;
 import com.scbb.bank.loan.model.enums.LoanStatus;
 import com.scbb.bank.loan.payload.InstallmentScheduleRequest;
@@ -17,6 +18,7 @@ import com.scbb.bank.loan.payload.InstallmentScheduleResponse;
 import com.scbb.bank.loan.payload.LoanStatusRequest;
 import com.scbb.bank.loan.payload.LoanStatusResponse;
 import com.scbb.bank.loan.payload.report.LoanReport;
+import com.scbb.bank.loan.payload.report.PieChart;
 import com.scbb.bank.loan.repository.LoanRepository;
 import com.scbb.bank.person.model.User;
 import org.springframework.data.domain.Example;
@@ -38,13 +40,15 @@ import static com.scbb.bank.util.Operator.*;
 public class LoanService implements AbstractService<Loan, Integer> {
 
 	private LoanRepository loanRepository;
+	private LoanTypeService loanTypeService;
 	private AccountRepository accountRepository;
 	private AccountService accountService;
 	private TransactionService transactionService;
 	private JwtTokenProvider tokenProvider;
 
-	public LoanService(LoanRepository loanRepository, AccountRepository accountRepository, AccountService accountService, TransactionService transactionService, JwtTokenProvider tokenProvider) {
+	public LoanService(LoanRepository loanRepository, LoanTypeService loanTypeService, AccountRepository accountRepository, AccountService accountService, TransactionService transactionService, JwtTokenProvider tokenProvider) {
 		this.loanRepository = loanRepository;
+		this.loanTypeService = loanTypeService;
 		this.accountRepository = accountRepository;
 		this.accountService = accountService;
 		this.transactionService = transactionService;
@@ -239,7 +243,7 @@ public class LoanService implements AbstractService<Loan, Integer> {
 		return mul(div(monthlyInterest, new BigDecimal(String.valueOf(today.lengthOfMonth()))), new BigDecimal(numOfDays.toString()));
 	}
 
-	public LoanReport report(Integer id) {
+	public LoanReport paymentHistoryChart(Integer id) {
 		Loan loan = loanRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Loan having id " + id + " cannot find"));
 		List<Transaction> transactionList = transactionService.findAllByEntryAccountNumber(loan.getAccount().getNumber());
@@ -277,10 +281,41 @@ public class LoanService implements AbstractService<Loan, Integer> {
 			emi = add(emi, loan.getEquatedMonthlyValue());
 			loanReport.getEmiData().getData().add(emi);
 		}
-
-
 		return loanReport;
 	}
+
+	@Transactional
+	public Long getLoansToBeApproved() {
+		return loanRepository.findAll().stream()
+				.filter(loan -> loan.getLoanStatus() == LoanStatus.Pending)
+				.count();
+	}
+
+	@Transactional
+	public BigDecimal getTotalArrears() {
+		BigDecimal totalArrears = new BigDecimal("0");
+		for (Loan loan : loanRepository.findAll()) {
+			if (loan.getLoanStatus() == LoanStatus.Approved)
+				totalArrears = add(totalArrears, calculateArrears(loan.getId()));
+		}
+		return totalArrears;
+	}
+
+	@Transactional
+	public PieChart getAllByLoanType() {
+		PieChart pieChart = new PieChart();
+		for (LoanType loanType : loanTypeService.findAll()) {
+			pieChart.getLabelList().add(loanType.getName() + " - " + loanType.getInterestRate() + "%");
+			BigDecimal total = new BigDecimal("0");
+			for (Loan loan : loanType.getLoanList()) {
+				if (loan.getLoanStatus() == LoanStatus.Approved)
+					total = add(total, loan.getAccount().getBalance());
+			}
+			pieChart.getDataList().add(total);
+		}
+		return pieChart;
+	}
+
 
 	@Scheduled(cron = "0 30 3 * * ?")
 	public void interestEntry() {

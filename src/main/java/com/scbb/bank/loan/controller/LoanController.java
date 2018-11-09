@@ -8,6 +8,7 @@ import com.scbb.bank.loan.payload.InstallmentScheduleResponse;
 import com.scbb.bank.loan.payload.LoanStatusRequest;
 import com.scbb.bank.loan.payload.LoanStatusResponse;
 import com.scbb.bank.loan.payload.report.LoanReport;
+import com.scbb.bank.loan.payload.report.PieChart;
 import com.scbb.bank.loan.service.LoanService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -58,8 +59,23 @@ public class LoanController implements AbstractController<Loan, Integer> {
 	}
 
 	@GetMapping("report/{id}")
-	public LoanReport report(@PathVariable Integer id) {
-		return loanService.report(id);
+	public LoanReport paymentHistoryChart(@PathVariable Integer id) {
+		return loanService.paymentHistoryChart(id);
+	}
+
+	@GetMapping("loanTypeReport")
+	public PieChart getAllByLoanType() {
+		return loanService.getAllByLoanType();
+	}
+
+	@GetMapping("loansToBeApproved")
+	public Long loansToBeApproved() {
+		return loanService.getLoansToBeApproved();
+	}
+
+	@GetMapping("totalArrears")
+	public BigDecimal totalArrears() {
+		return loanService.getTotalArrears();
 	}
 
 	@PutMapping("calcInterest")
@@ -120,6 +136,9 @@ public class LoanController implements AbstractController<Loan, Integer> {
 			loan.getMember().setBoardMember(null);
 			loan.getMember().setTeam(null);
 			loan.getMember().setShareAccount(null);
+		}
+		if (loan.getLoanType() != null) {
+			loan.getLoanType().setLoanList(null);
 		}
 		return loan;
 	}

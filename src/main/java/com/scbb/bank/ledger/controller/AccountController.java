@@ -3,6 +3,7 @@ package com.scbb.bank.ledger.controller;
 import com.scbb.bank.interfaces.AbstractController;
 import com.scbb.bank.ledger.model.Account;
 import com.scbb.bank.ledger.service.AccountService;
+import com.scbb.bank.loan.payload.report.DataSet;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,6 +40,16 @@ public class AccountController implements AbstractController<Account, Integer> {
 	@GetMapping("number/{number}")
 	public Account findByNumber(@PathVariable String number) {
 		return modifyResource(accountService.findByNumber(number));
+	}
+
+	@GetMapping("shares/report")
+	public List<DataSet> shareReport() {
+		return accountService.sharesReport();
+	}
+
+	@GetMapping("teams/report")
+	public List<DataSet> teamReport() {
+		return accountService.teamReport();
 	}
 
 	@PostMapping

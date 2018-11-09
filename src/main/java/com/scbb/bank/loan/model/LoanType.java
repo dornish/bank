@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,4 +30,7 @@ public class LoanType {
 
 	@Column(scale = 2, precision = 12)
 	private BigDecimal maxAmount;
+
+	@OneToMany(mappedBy = "loanType")
+	private List<Loan> loanList;
 }

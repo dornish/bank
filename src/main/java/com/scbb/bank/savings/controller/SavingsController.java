@@ -1,7 +1,9 @@
 package com.scbb.bank.savings.controller;
 
 import com.scbb.bank.interfaces.AbstractController;
+import com.scbb.bank.loan.payload.report.PieChart;
 import com.scbb.bank.savings.model.Savings;
+import com.scbb.bank.savings.payload.SavingsReport;
 import com.scbb.bank.savings.service.SavingsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +35,17 @@ public class SavingsController implements AbstractController<Savings, Integer> {
 	@GetMapping("{id}")
 	public Savings findById(@PathVariable Integer id) {
 		return modifyResource(savingsService.findById(id));
+	}
+
+
+	@GetMapping("report/all")
+	public SavingsReport getAllSavingsByType() {
+		return savingsService.getAllSavingsByType();
+	}
+
+	@GetMapping("report/pieChart")
+	public PieChart getPieChartByType() {
+		return savingsService.getAllUsingPieChart();
 	}
 
 	@PostMapping
@@ -69,6 +82,9 @@ public class SavingsController implements AbstractController<Savings, Integer> {
 			savings.getMember().setSubsidy(null);
 			savings.getMember().setSavingsList(null);
 			savings.getMember().setLoanList(null);
+		}
+		if (savings.getSavingType() != null) {
+			savings.getSavingType().setSavingsList(null);
 		}
 		return savings;
 	}

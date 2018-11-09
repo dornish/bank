@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
@@ -21,17 +22,17 @@ public class SavingTypeController implements AbstractController<SavingType, Inte
 
 	@GetMapping
 	public List<SavingType> findAll() {
-		return savingTypeService.findAll();
+		return modifyResources(savingTypeService.findAll());
 	}
 
 	@GetMapping("{id}")
 	public SavingType findById(@PathVariable Integer id) {
-		return savingTypeService.findById(id);
+		return modifyResource(savingTypeService.findById(id));
 	}
 
 	@Override
 	public SavingType persist(SavingType savingType) {
-		return null;
+		return modifyResource(savingTypeService.persist(savingType));
 	}
 
 	@Override
@@ -46,11 +47,20 @@ public class SavingTypeController implements AbstractController<SavingType, Inte
 
 	@Override
 	public SavingType modifyResource(SavingType savingType) {
-		return null;
+		if (savingType.getSavingsList() != null) {
+			savingType.getSavingsList().forEach(savings -> {
+				savings.setSavingType(null);
+				savings.setMember(null);
+				savings.setAccount(null);
+			});
+		}
+		return savingType;
 	}
 
 	@Override
 	public List<SavingType> modifyResources(List<SavingType> savingTypes) {
-		return null;
+		return savingTypes.stream()
+				.map(this::modifyResource)
+				.collect(Collectors.toList());
 	}
 }

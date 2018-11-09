@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
@@ -23,7 +24,7 @@ public class LoanTypeController{
 
 	@GetMapping
 	public List<LoanType> findAll() {
-		return loanTypeService.findAll();
+		return modifyResources(loanTypeService.findAll());
 	}
 
 	@GetMapping("{id}")
@@ -55,11 +56,20 @@ public class LoanTypeController{
 
 
 	public LoanType modifyResource(LoanType loanType) {
-		return null;
+		if (loanType.getLoanList() != null) {
+			loanType.getLoanList().forEach(loan -> {
+				loan.setAccount(null);
+				loan.setMember(null);
+				loan.setLoanType(null);
+			});
+		}
+		return loanType;
 	}
 
 
 	public List<LoanType> modifyResources(List<LoanType> loanTypes) {
-		return null;
+		return loanTypes.stream()
+				.map(this::modifyResource)
+				.collect(Collectors.toList());
 	}
 }
