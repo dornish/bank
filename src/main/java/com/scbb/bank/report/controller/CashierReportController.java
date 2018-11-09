@@ -32,4 +32,19 @@ public class CashierReportController {
 	                  HttpServletResponse response) {
 		cashierReportService.share(id, token, response);
 	}
+
+	@GetMapping("trams/transaction/{id}")
+	public void team(@PathVariable Integer id,
+	                 @RequestHeader("Authorization") String token,
+	                 HttpServletResponse response) {
+		cashierReportService.team(id, token, response);
+	}
+
+	@GetMapping("loans/transaction/{id}")
+	public void loan(@PathVariable Integer id,
+	                 @RequestHeader("Authorization") String token,
+	                 HttpServletResponse response) {
+		cashierReportService.loan(id, token, response);
+	}
 }
+

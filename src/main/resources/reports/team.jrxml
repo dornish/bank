@@ -3,19 +3,10 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
-              name="Blank_A4" pageWidth="298" pageHeight="298" columnWidth="270" leftMargin="14" rightMargin="14"
+              name="Blank_A4" pageWidth="298" pageHeight="326" columnWidth="270" leftMargin="14" rightMargin="14"
               topMargin="14" bottomMargin="14" uuid="5e04341a-5bdb-4be1-ac70-38e2588c7aef">
     <property name="com.jaspersoft.studio.unit." value="cm"/>
-    <property name="com.jaspersoft.studio.unit.pageHeight" value="cm"/>
-    <property name="com.jaspersoft.studio.unit.pageWidth" value="cm"/>
-    <property name="com.jaspersoft.studio.unit.topMargin" value="cm"/>
-    <property name="com.jaspersoft.studio.unit.bottomMargin" value="cm"/>
-    <property name="com.jaspersoft.studio.unit.leftMargin" value="cm"/>
-    <property name="com.jaspersoft.studio.unit.rightMargin" value="cm"/>
-    <property name="com.jaspersoft.studio.unit.columnWidth" value="cm"/>
-    <property name="com.jaspersoft.studio.unit.columnSpacing" value="cm"/>
     <property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
-    <parameter name="operationType" class="java.lang.String"/>
     <parameter name="transId" class="java.lang.Integer"/>
     <parameter name="generatedUser" class="java.lang.String"/>
     <parameter name="transactionDateTime" class="java.lang.String"/>
@@ -35,7 +26,7 @@
         <band splitType="Stretch"/>
     </background>
     <detail>
-        <band height="270" splitType="Stretch">
+        <band height="296" splitType="Stretch">
             <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
             <staticText>
                 <reportElement x="0" y="0" width="270" height="50" uuid="4df6651c-d628-4e85-8c6c-daff86b639b8"/>
@@ -58,14 +49,14 @@ Kottawa]]></text>
                 <textElement textAlignment="Right" verticalAlignment="Bottom">
                     <font size="12" isBold="true"/>
                 </textElement>
-                <text><![CDATA[Cash]]></text>
+                <text><![CDATA[Team Deposit]]></text>
             </staticText>
             <textField>
                 <reportElement x="100" y="89" width="170" height="20" uuid="ab87103b-ed0d-42cc-b00a-e737a32dcb95"/>
                 <textElement verticalAlignment="Bottom">
                     <font size="12" isBold="true"/>
                 </textElement>
-                <textFieldExpression><![CDATA[" " + $P{operationType} + " - " + $P{transId}]]></textFieldExpression>
+                <textFieldExpression><![CDATA[" - " + $P{transId}]]></textFieldExpression>
             </textField>
             <staticText>
                 <reportElement x="0" y="117" width="60" height="18" uuid="4b102102-d284-43d7-8c0f-94718cbcef9b"/>
@@ -133,21 +124,21 @@ Kottawa]]></text>
                 <text><![CDATA[:]]></text>
             </staticText>
             <staticText>
-                <reportElement x="70" y="252" width="80" height="12" uuid="37f72730-c8b7-49d2-8229-e26a423e915f"/>
+                <reportElement x="70" y="278" width="80" height="12" uuid="37f72730-c8b7-49d2-8229-e26a423e915f"/>
                 <textElement>
                     <font size="9"/>
                 </textElement>
                 <text><![CDATA[Generated date]]></text>
             </staticText>
             <staticText>
-                <reportElement x="150" y="252" width="20" height="12" uuid="2a152a25-9238-4489-a388-cdd0b5f65b7a"/>
+                <reportElement x="150" y="278" width="20" height="12" uuid="2a152a25-9238-4489-a388-cdd0b5f65b7a"/>
                 <textElement textAlignment="Center">
                     <font size="9"/>
                 </textElement>
                 <text><![CDATA[:]]></text>
             </staticText>
             <textField pattern="yyyy-MM-dd @ HH:mm:ss">
-                <reportElement x="170" y="252" width="100" height="12" uuid="46ab0aca-2012-4bf7-b56e-9de3e50e6089"/>
+                <reportElement x="170" y="278" width="100" height="12" uuid="46ab0aca-2012-4bf7-b56e-9de3e50e6089"/>
                 <textElement>
                     <font size="9"/>
                 </textElement>
@@ -167,21 +158,21 @@ Kottawa]]></text>
                 <textFieldExpression><![CDATA[$P{transactionDateTime}]]></textFieldExpression>
             </textField>
             <staticText>
-                <reportElement x="70" y="240" width="80" height="12" uuid="da67d3af-2ca8-446e-9c5a-ccf54f2ebdc6"/>
+                <reportElement x="70" y="266" width="80" height="12" uuid="da67d3af-2ca8-446e-9c5a-ccf54f2ebdc6"/>
                 <textElement>
                     <font size="9"/>
                 </textElement>
                 <text><![CDATA[Generated by]]></text>
             </staticText>
             <staticText>
-                <reportElement x="150" y="240" width="20" height="12" uuid="8bf79d29-ed07-4755-95be-d99ca72661fe"/>
+                <reportElement x="150" y="266" width="20" height="12" uuid="8bf79d29-ed07-4755-95be-d99ca72661fe"/>
                 <textElement textAlignment="Center">
                     <font size="9"/>
                 </textElement>
                 <text><![CDATA[:]]></text>
             </staticText>
             <textField>
-                <reportElement x="170" y="240" width="100" height="12" uuid="bc480d1f-c3a6-4f0b-b435-c6ea5906601a"/>
+                <reportElement x="170" y="266" width="100" height="12" uuid="bc480d1f-c3a6-4f0b-b435-c6ea5906601a"/>
                 <textElement>
                     <font size="9"/>
                 </textElement>
