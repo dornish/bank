@@ -202,6 +202,8 @@ public class CashierReportService {
 				else {
 					capital = entry.getAmount();
 					balance = entry.getAccount().getBalance();
+					accountNumber = entry.getAccount().getNumber();
+					member = entry.getAccount().getLoan().getMember().getFullName();
 				}
 			}
 
