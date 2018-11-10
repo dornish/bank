@@ -21,13 +21,16 @@ import com.scbb.bank.loan.payload.report.LoanReport;
 import com.scbb.bank.loan.payload.report.PieChart;
 import com.scbb.bank.loan.repository.LoanRepository;
 import com.scbb.bank.person.model.User;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
+import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -39,20 +42,28 @@ import static com.scbb.bank.util.Operator.*;
 @Service
 public class LoanService implements AbstractService<Loan, Integer> {
 
+	@Value("${sms.api.id}")
+	private String id;
+
+	@Value("${sms.api.pw}")
+	private String pw;
+
 	private LoanRepository loanRepository;
 	private LoanTypeService loanTypeService;
 	private AccountRepository accountRepository;
 	private AccountService accountService;
 	private TransactionService transactionService;
 	private JwtTokenProvider tokenProvider;
+	private RestTemplate restTemplate;
 
-	public LoanService(LoanRepository loanRepository, LoanTypeService loanTypeService, AccountRepository accountRepository, AccountService accountService, TransactionService transactionService, JwtTokenProvider tokenProvider) {
+	public LoanService(LoanRepository loanRepository, LoanTypeService loanTypeService, AccountRepository accountRepository, AccountService accountService, TransactionService transactionService, JwtTokenProvider tokenProvider, RestTemplate restTemplate) {
 		this.loanRepository = loanRepository;
 		this.loanTypeService = loanTypeService;
 		this.accountRepository = accountRepository;
 		this.accountService = accountService;
 		this.transactionService = transactionService;
 		this.tokenProvider = tokenProvider;
+		this.restTemplate = restTemplate;
 	}
 
 	@Transactional
@@ -103,6 +114,7 @@ public class LoanService implements AbstractService<Loan, Integer> {
 
 		loan.setLoanStatus(LoanStatus.Approved);
 		loan.setGrantedDate(LocalDate.now());
+		loan.setEquatedMonthlyValue(calculateEMI(loan.getRequestedAmount(), loan.getDuration(), loan.getLoanType().getInterestRate()));
 
 		// loan account creation
 		Account account = new Account(
@@ -130,7 +142,22 @@ public class LoanService implements AbstractService<Loan, Integer> {
 		transaction.getEntryList().add(loanEntry);
 		transaction.getEntryList().add(entry2);
 		transactionService.record(transaction);
-
+		if (loan.getMember().getTelephone() != null) {
+			String baseUrl = "http://www.textit.biz/sendmsg/index.php?";
+			String msg = "Your+loan+has+been+approved+and+your+installment+amount+is+" +
+					loan.getEquatedMonthlyValue() + "+and+next+installment+date+is+" +
+					LocalDate.now().plusMonths(1);
+			String to = loan.getMember().getTelephone().substring(1);
+			String fullUrl = baseUrl +
+					"id=" + this.id + "&" +
+					"password=" + this.pw + "&" +
+					"text=" + msg + "&" +
+					"to=" + to + "&" +
+					"eco=" + "Y";
+			String response = restTemplate.getForObject(URI.create(fullUrl), String.class);
+			System.out.println(response);
+		}
+		loanRepository.save(loan);
 		return loanRepository.save(loan);
 	}
 
@@ -314,6 +341,25 @@ public class LoanService implements AbstractService<Loan, Integer> {
 			pieChart.getDataList().add(total);
 		}
 		return pieChart;
+	}
+
+	public void arrearsSMS(Integer id) {
+		String baseUrl = "http://www.textit.biz/sendmsg/index.php?";
+		Loan loan = findById(id);
+		BigDecimal arrears = calculateArrears(id);
+		String msg = "Arrears+Notification%0a" +
+				"Your+Arrears+amount+" + arrears +
+				"+needs+to+be+paid+before+next+installment+date";
+
+		String to = loan.getMember().getTelephone().substring(1);
+		String fullUrl = baseUrl +
+				"id=" + this.id + "&" +
+				"password=" + this.pw + "&" +
+				"text=" + msg + "&" +
+				"to=" + to + "&" +
+				"eco=" + "Y";
+		String response = restTemplate.getForObject(URI.create(fullUrl), String.class);
+		System.out.println(response);
 	}
 
 

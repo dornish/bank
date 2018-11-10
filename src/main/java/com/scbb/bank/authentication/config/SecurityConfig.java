@@ -4,6 +4,7 @@ import com.scbb.bank.authentication.security.JwtAuthenticationEntryPoint;
 import com.scbb.bank.authentication.security.JwtAuthenticationFilter;
 import com.scbb.bank.person.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,6 +18,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @EnableWebSecurity
@@ -32,6 +34,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	public JwtAuthenticationFilter jwtAuthenticationFilter() {
 		return new JwtAuthenticationFilter();
+	}
+
+	@Bean
+	public RestTemplate restTemplate(RestTemplateBuilder builder) {
+		return builder.build();
 	}
 
 	@Override

@@ -4,8 +4,12 @@ import com.scbb.bank.exception.ResourceCannotDeleteException;
 import com.scbb.bank.exception.ResourceNotFoundException;
 import com.scbb.bank.interfaces.AbstractService;
 import com.scbb.bank.ledger.model.Account;
+import com.scbb.bank.ledger.model.AccountType;
 import com.scbb.bank.ledger.model.Entry;
+import com.scbb.bank.ledger.model.SubAccountType;
 import com.scbb.bank.ledger.model.enums.OperationType;
+import com.scbb.bank.ledger.payload.AccountTypeReport;
+import com.scbb.bank.ledger.payload.SubAccountTypeReport;
 import com.scbb.bank.ledger.repository.AccountRepository;
 import com.scbb.bank.ledger.repository.SubAccountTypeRepository;
 import com.scbb.bank.loan.payload.report.DataSet;
@@ -31,12 +35,14 @@ public class AccountService implements AbstractService<Account, Integer> {
 	private AccountRepository accountRepository;
 	private TransactionService transactionService;
 	private EntryService entryService;
+	private AccountTypeService accountTypeService;
 	private SubAccountTypeRepository subAccountTypeRepository;
 
-	public AccountService(AccountRepository accountRepository, TransactionService transactionService, EntryService entryService, SubAccountTypeRepository subAccountTypeRepository) {
+	public AccountService(AccountRepository accountRepository, TransactionService transactionService, EntryService entryService, AccountTypeService accountTypeService, SubAccountTypeRepository subAccountTypeRepository) {
 		this.accountRepository = accountRepository;
 		this.transactionService = transactionService;
 		this.entryService = entryService;
+		this.accountTypeService = accountTypeService;
 		this.subAccountTypeRepository = subAccountTypeRepository;
 	}
 
@@ -191,4 +197,111 @@ public class AccountService implements AbstractService<Account, Integer> {
 		dataSetList.add(previousMonth);
 		return dataSetList;
 	}
+
+	@Transactional
+	public List<AccountTypeReport> incomeStatement(LocalDateTime from, LocalDateTime to) {
+		List<AccountTypeReport> accountTypeReportList = new ArrayList<>();
+		for (AccountType accountType : accountTypeService.findAll()) {
+
+			if (accountType.getName().equals("Capital") || accountType.getName().equals("Assets") || accountType.getName().equals("Liabilities"))
+				continue;
+
+			AccountTypeReport accountTypeReport = new AccountTypeReport(accountType.getName());
+			BigDecimal accountTypeTotal = new BigDecimal("0");
+
+			for (SubAccountType subAccountType : accountType.getSubAccountTypeList()) {
+
+				SubAccountTypeReport subAccountTypeReport = new SubAccountTypeReport(subAccountType.getName());
+				BigDecimal subAccountTypeTotal = new BigDecimal("0");
+
+				for (Account account : subAccountType.getAccountList()) {
+
+					if (from != null && to != null) { // finding with period
+						for (Entry entry : entryService.findAllByAccountNumber(account.getNumber(), from, to)) {
+							if (entry.getOperationType() == account.getOperationType()) {
+								accountTypeTotal = add(subAccountTypeTotal, entry.getAmount());
+								subAccountTypeTotal = add(subAccountTypeTotal, entry.getAmount());
+							} else {
+								accountTypeTotal = sub(subAccountTypeTotal, entry.getAmount());
+								subAccountTypeTotal = sub(subAccountTypeTotal, entry.getAmount());
+							}
+						}
+					} else { // finding with last balances
+						System.out.println("----------finding with last balances--------------");
+						accountTypeTotal = add(accountTypeTotal, account.getBalance());
+						subAccountTypeTotal = add(subAccountTypeTotal, account.getBalance());
+					}
+				}
+				subAccountTypeReport.setBalance(subAccountTypeTotal);
+				accountTypeReport.getSubList().add(subAccountTypeReport);
+			}
+			accountTypeReport.setBalance(accountTypeTotal);
+			accountTypeReportList.add(accountTypeReport);
+		}
+		return accountTypeReportList;
+	}
+
+	@Transactional
+	public List<AccountTypeReport> balanceSheet(LocalDateTime from, LocalDateTime to) {
+		List<AccountTypeReport> accountTypeReportList = new ArrayList<>();
+
+		for (AccountType accountType : accountTypeService.findAll()) {
+			if (accountType.getName().equals("Income") || accountType.getName().equals("Expenses"))
+				continue;
+
+			AccountTypeReport accountTypeReport = new AccountTypeReport(accountType.getName());
+			BigDecimal accountTypeTotal = new BigDecimal("0");
+
+			for (SubAccountType subAccountType : accountType.getSubAccountTypeList()) {
+				SubAccountTypeReport subAccountTypeReport = new SubAccountTypeReport(subAccountType.getName());
+				BigDecimal subAccountTypeTotal = new BigDecimal("0");
+
+				for (Account account : subAccountType.getAccountList()) {
+
+					if (from != null && to != null) {
+						for (Entry entry : entryService.findAllByAccountNumber(account.getNumber(), from, to)) {
+							if (entry.getOperationType() == account.getOperationType()) {
+								accountTypeTotal = add(subAccountTypeTotal, entry.getAmount());
+								subAccountTypeTotal = add(subAccountTypeTotal, entry.getAmount());
+							} else {
+								accountTypeTotal = sub(subAccountTypeTotal, entry.getAmount());
+								subAccountTypeTotal = sub(subAccountTypeTotal, entry.getAmount());
+							}
+						}
+					} else {
+						System.out.println("----------finding with last balances--------------");
+						accountTypeTotal = add(accountTypeTotal, account.getBalance());
+						subAccountTypeTotal = add(subAccountTypeTotal, account.getBalance());
+					}
+
+
+				}
+				subAccountTypeReport.setBalance(subAccountTypeTotal);
+				accountTypeReport.getSubList().add(subAccountTypeReport);
+
+			}
+			if (accountType.getName().equals("Capital")) {
+				SubAccountTypeReport profitOrLoss = new SubAccountTypeReport("Profit/Loss");
+				BigDecimal totalIncome = new BigDecimal("0");
+				BigDecimal totalExpenses = new BigDecimal("0");
+
+				for (AccountTypeReport typeReport : incomeStatement(from, to)) {
+					if (typeReport.getName().equals("Income"))
+						totalIncome = typeReport.getBalance();
+					else
+						totalExpenses = typeReport.getBalance();
+				}
+				profitOrLoss.setBalance(sub(totalIncome, totalExpenses));
+				accountTypeReport.getSubList().add(profitOrLoss);
+				accountTypeTotal = add(accountTypeTotal, profitOrLoss.getBalance());
+			}
+
+			accountTypeReport.setBalance(accountTypeTotal);
+			accountTypeReportList.add(accountTypeReport);
+
+		}
+		return accountTypeReportList;
+	}
+
+
 }

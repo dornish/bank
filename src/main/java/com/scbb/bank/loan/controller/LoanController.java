@@ -78,6 +78,11 @@ public class LoanController implements AbstractController<Loan, Integer> {
 		return loanService.getTotalArrears();
 	}
 
+	@GetMapping("sms/{id}")
+	public void arrearsSMS(@PathVariable Integer id) {
+		loanService.arrearsSMS(id);
+	}
+
 	@PutMapping("calcInterest")
 	public LoanStatusResponse calculateInterest(@RequestBody LoanStatusRequest loanStatusRequest) {
 		return loanService.calculateInterest(loanStatusRequest);

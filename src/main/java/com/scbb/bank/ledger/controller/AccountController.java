@@ -2,12 +2,15 @@ package com.scbb.bank.ledger.controller;
 
 import com.scbb.bank.interfaces.AbstractController;
 import com.scbb.bank.ledger.model.Account;
+import com.scbb.bank.ledger.payload.AccountTypeReport;
 import com.scbb.bank.ledger.service.AccountService;
 import com.scbb.bank.loan.payload.report.DataSet;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,6 +53,20 @@ public class AccountController implements AbstractController<Account, Integer> {
 	@GetMapping("teams/report")
 	public List<DataSet> teamReport() {
 		return accountService.teamReport();
+	}
+
+	@GetMapping("incomeStatement")
+	public List<AccountTypeReport> incomeStatement(
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @RequestParam(required = false) LocalDateTime fromDate,
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @RequestParam(required = false) LocalDateTime toDate) {
+		return accountService.incomeStatement(fromDate, toDate);
+	}
+
+	@GetMapping("balanceSheet")
+	public List<AccountTypeReport> balanceSheet(
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @RequestParam(required = false) LocalDateTime fromDate,
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @RequestParam(required = false) LocalDateTime toDate) {
+		return accountService.balanceSheet(fromDate, toDate);
 	}
 
 	@PostMapping

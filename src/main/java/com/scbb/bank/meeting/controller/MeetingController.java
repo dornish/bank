@@ -30,6 +30,11 @@ public class MeetingController implements AbstractController<Meeting, Integer> {
 		return modifyResource(meetingService.findById(id));
 	}
 
+	@GetMapping("sms/{id}")
+	public void sms(@PathVariable Integer id) {
+		meetingService.sms(id);
+	}
+
 	@PostMapping
 	@PutMapping
 	public Meeting persist(@RequestBody Meeting meeting) {
