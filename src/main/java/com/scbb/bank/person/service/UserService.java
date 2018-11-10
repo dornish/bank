@@ -1,10 +1,8 @@
 package com.scbb.bank.person.service;
 
 import com.scbb.bank.exception.ResourceNotFoundException;
-import com.scbb.bank.interfaces.AbstractService;
 import com.scbb.bank.person.model.User;
 import com.scbb.bank.person.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,12 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class UserService implements UserDetailsService, AbstractService<User, Integer> {
+public class UserService implements UserDetailsService {
 
 	private UserRepository userRepository;
 	private PasswordEncoder passwordEncoder;
 
-	@Autowired
+
 	public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;

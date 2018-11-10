@@ -68,8 +68,8 @@ public class EntryService {
 		List<Entry> entryList = entryRepository.findAll(Example.of(entry, matcher));
 		if (fromDate != null && toDate != null)
 			return entryList.stream()
-					.filter(entry1 -> entry1.getTransaction().getDateTime().isBefore(toDate))
-					.filter(entry1 -> entry1.getTransaction().getDateTime().isAfter(fromDate))
+					.filter(entry1 -> entry1.getTransaction().getDateTime().isBefore(toDate) || entry1.getTransaction().getDateTime().isEqual(toDate))
+					.filter(entry1 -> entry1.getTransaction().getDateTime().isAfter(fromDate) || entry1.getTransaction().getDateTime().isEqual(fromDate))
 					.collect(Collectors.toList());
 		return entryList;
 	}

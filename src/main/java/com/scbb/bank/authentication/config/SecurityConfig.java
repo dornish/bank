@@ -4,7 +4,6 @@ import com.scbb.bank.authentication.security.JwtAuthenticationEntryPoint;
 import com.scbb.bank.authentication.security.JwtAuthenticationFilter;
 import com.scbb.bank.person.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,48 +14,41 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	private JwtAuthenticationEntryPoint unauthorizedHandler;
+	private final JwtAuthenticationEntryPoint unauthorizedHandler;
+
+	private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+	private final UserService userService;
+
+	private final PasswordEncoder passwordEncoder;
 
 	@Autowired
-	private UserService userService;
-
-	@Bean
-	public JwtAuthenticationFilter jwtAuthenticationFilter() {
-		return new JwtAuthenticationFilter();
-	}
-
-	@Bean
-	public RestTemplate restTemplate(RestTemplateBuilder builder) {
-		return builder.build();
+	public SecurityConfig(JwtAuthenticationEntryPoint unauthorizedHandler, JwtAuthenticationFilter jwtAuthenticationFilter, UserService userService, PasswordEncoder passwordEncoder) {
+		this.unauthorizedHandler = unauthorizedHandler;
+		this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+		this.userService = userService;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	@Override
 	public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
 		authenticationManagerBuilder
 				.userDetailsService(userService)
-				.passwordEncoder(passwordEncoder());
+				.passwordEncoder(passwordEncoder);
 	}
 
 	@Bean(BeanIds.AUTHENTICATION_MANAGER)
 	@Override
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
-	}
-
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
 	}
 
 	@Override
@@ -90,7 +82,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/**").permitAll()
 				.anyRequest().authenticated();
 		// Add our custom JWT security filter
-		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
 		// disable page caching
 		http

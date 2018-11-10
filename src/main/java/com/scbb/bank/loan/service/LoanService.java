@@ -252,7 +252,7 @@ public class LoanService implements AbstractService<Loan, Integer> {
 		return arrears;
 	}
 
-	private BigDecimal getMonthlyInterestRate(BigDecimal interestRate) {
+	public BigDecimal getMonthlyInterestRate(BigDecimal interestRate) {
 		return div(div(interestRate, new BigDecimal("100")), new BigDecimal("12"));
 	}
 
@@ -363,7 +363,7 @@ public class LoanService implements AbstractService<Loan, Integer> {
 	}
 
 
-	@Scheduled(cron = "0 30 3 * * ?")
+	@Scheduled(cron = "0 30 23 * * ?")
 	public void interestEntry() {
 		if (LocalDate.now().getDayOfMonth() != LocalDate.now().lengthOfMonth())
 			return;

@@ -3,19 +3,25 @@ package com.scbb.bank.savings.service;
 import com.scbb.bank.exception.ResourceCannotDeleteException;
 import com.scbb.bank.exception.ResourceNotFoundException;
 import com.scbb.bank.interfaces.AbstractService;
+import com.scbb.bank.ledger.model.Account;
 import com.scbb.bank.ledger.model.Entry;
+import com.scbb.bank.ledger.model.Transaction;
+import com.scbb.bank.ledger.model.enums.EntryType;
 import com.scbb.bank.ledger.model.enums.OperationType;
 import com.scbb.bank.ledger.service.AccountService;
 import com.scbb.bank.ledger.service.EntryService;
 import com.scbb.bank.ledger.service.TransactionService;
 import com.scbb.bank.loan.payload.report.DataSet;
 import com.scbb.bank.loan.payload.report.PieChart;
+import com.scbb.bank.loan.service.LoanService;
+import com.scbb.bank.person.model.User;
 import com.scbb.bank.savings.model.SavingType;
 import com.scbb.bank.savings.model.Savings;
 import com.scbb.bank.savings.payload.SavingsReport;
 import com.scbb.bank.savings.repository.SavingsRepository;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,8 +32,7 @@ import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
 
-import static com.scbb.bank.util.Operator.add;
-import static com.scbb.bank.util.Operator.sub;
+import static com.scbb.bank.util.Operator.*;
 
 @Service
 public class SavingsService implements AbstractService<Savings, Integer> {
@@ -37,13 +42,15 @@ public class SavingsService implements AbstractService<Savings, Integer> {
 	private AccountService accountService;
 	private TransactionService transactionService;
 	private EntryService entryService;
+	private LoanService loanService;
 
-	public SavingsService(SavingsRepository savingsRepository, SavingTypeService savingTypeService, AccountService accountService, TransactionService transactionService, EntryService entryService) {
+	public SavingsService(SavingsRepository savingsRepository, SavingTypeService savingTypeService, AccountService accountService, TransactionService transactionService, EntryService entryService, LoanService loanService) {
 		this.savingsRepository = savingsRepository;
 		this.savingTypeService = savingTypeService;
 		this.accountService = accountService;
 		this.transactionService = transactionService;
 		this.entryService = entryService;
+		this.loanService = loanService;
 	}
 
 	@Transactional
@@ -139,5 +146,39 @@ public class SavingsService implements AbstractService<Savings, Integer> {
 			pieChart.getDataList().add(total);
 		}
 		return pieChart;
+	}
+
+	@Scheduled(cron = "0 40 3 * * ?")
+	public void interest() {
+		if (LocalDate.now().getDayOfMonth() != LocalDate.now().lengthOfMonth())
+			return;
+		LocalDateTime today = LocalDateTime.now();
+		savingsRepository.findAll().forEach(savings -> {
+			LocalDateTime varDate = LocalDateTime.of(today.getYear(), today.getMonth(), 1, 0, 0);
+			BigDecimal totalBalance = new BigDecimal("0");
+			while (today.isAfter(varDate) || today.isEqual(varDate)) {
+				BigDecimal dailyBalance = new BigDecimal("0");
+				List<Entry> entryList = entryService.findAllByAccountNumber(savings.getAccount().getNumber(), varDate, varDate.withHour(23).withMinute(59));
+				for (Entry entry : entryList) {
+					if (entry.getOperationType() == OperationType.Credit)
+						dailyBalance = add(dailyBalance, entry.getAmount());
+					else
+						dailyBalance = add(dailyBalance, entry.getAmount());
+					totalBalance = add(totalBalance, dailyBalance);
+				}
+				varDate = varDate.plusDays(1);
+			}
+			BigDecimal average = div(totalBalance, new BigDecimal(String.valueOf(today.toLocalDate().lengthOfMonth())));
+			BigDecimal monthlyInterestRate = loanService.getMonthlyInterestRate(savings.getSavingType().getInterestRate());
+			BigDecimal interest = mul(average, monthlyInterestRate);
+
+			Transaction transaction = new Transaction(LocalDateTime.now(), EntryType.Transaction_Entry, new User(1));
+			Entry interestEntry = new Entry(new Account(4), interest, OperationType.Debit);
+			Entry savingEntry = new Entry(savings.getAccount(), interest, OperationType.Credit);
+			transaction.getEntryList().add(interestEntry);
+			transaction.getEntryList().add(savingEntry);
+			transactionService.record(transaction);
+
+		});
 	}
 }

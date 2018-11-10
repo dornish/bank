@@ -1,7 +1,6 @@
 package com.scbb.bank.meeting.service;
 
 import com.scbb.bank.exception.ResourceNotFoundException;
-import com.scbb.bank.interfaces.AbstractService;
 import com.scbb.bank.meeting.model.Meeting;
 import com.scbb.bank.meeting.model.enums.MeetingStatus;
 import com.scbb.bank.meeting.repository.MeetingRepository;
@@ -15,12 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class MeetingService implements AbstractService<Meeting, Integer> {
+public class MeetingService {
 
 	private MeetingRepository meetingRepository;
 	private BoardMemberService boardMemberService;
@@ -67,13 +67,20 @@ public class MeetingService implements AbstractService<Meeting, Integer> {
 	}
 
 	@Transactional
-	public List<Meeting> search(Meeting meeting) {
+	public List<Meeting> search(Meeting meeting, LocalDate fromDate, LocalDate toDate) {
 		ExampleMatcher matcher = ExampleMatcher
 				.matching()
 				.withIgnoreCase()
 				.withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
 		Example<Meeting> example = Example.of(meeting, matcher);
-		return meetingRepository.findAll(example);
+		List<Meeting> meetingList = meetingRepository.findAll(example);
+		if (fromDate != null && toDate != null) {
+			return meetingList.stream()
+					.filter(meeting1 -> meeting1.getDate().isAfter(fromDate) || meeting1.getDate().isEqual(fromDate))
+					.filter(meeting1 -> meeting1.getDate().isBefore(toDate) || meeting1.getDate().isEqual(toDate))
+					.collect(Collectors.toList());
+		}
+		return meetingList;
 	}
 
 	@Transactional

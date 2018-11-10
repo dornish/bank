@@ -1,18 +1,19 @@
 package com.scbb.bank.meeting.controller;
 
-import com.scbb.bank.interfaces.AbstractController;
 import com.scbb.bank.meeting.model.Meeting;
 import com.scbb.bank.meeting.service.MeetingService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
 @RequestMapping("/meetings")
-public class MeetingController implements AbstractController<Meeting, Integer> {
+public class MeetingController {
 
 	private MeetingService meetingService;
 
@@ -48,11 +49,14 @@ public class MeetingController implements AbstractController<Meeting, Integer> {
 	}
 
 	@PutMapping("search")
-	public List<Meeting> search(@RequestBody Meeting meeting) {
-		return modifyResources(meetingService.search(meeting));
+	public List<Meeting> search(
+			@RequestBody Meeting meeting,
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam(required = false) LocalDate fromDate,
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam(required = false) LocalDate toDate) {
+		return modifyResources(meetingService.search(meeting, fromDate, toDate));
 	}
 
-	@Override
+
 	public Meeting modifyResource(Meeting meeting) {
 		if (meeting.getAttendanceList() != null)
 			meeting.getAttendanceList()
@@ -63,7 +67,7 @@ public class MeetingController implements AbstractController<Meeting, Integer> {
 		return meeting;
 	}
 
-	@Override
+
 	public List<Meeting> modifyResources(List<Meeting> meetingList) {
 		return meetingList
 				.stream()
