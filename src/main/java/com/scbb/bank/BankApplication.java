@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 @SpringBootApplication
-@EnableJpaRepositories
+@EnableJpaRepositories(basePackages = {"com.scbb.bank"})
 @EnableScheduling
 public class BankApplication {
 

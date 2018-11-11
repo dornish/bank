@@ -1,8 +1,8 @@
 package com.scbb.bank.authentication.config;
 
 import com.scbb.bank.authentication.security.JwtAuthenticationEntryPoint;
-import com.scbb.bank.authentication.security.JwtAuthenticationFilter;
-import com.scbb.bank.person.service.UserService;
+import com.scbb.bank.other.JwtAuthenticationFilter;
+import com.scbb.bank.other.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

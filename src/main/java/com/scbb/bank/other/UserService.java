@@ -1,8 +1,7 @@
-package com.scbb.bank.person.service;
+package com.scbb.bank.other;
 
 import com.scbb.bank.exception.ResourceNotFoundException;
 import com.scbb.bank.person.model.User;
-import com.scbb.bank.person.repository.UserRepository;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +17,7 @@ import java.util.List;
 public class UserService implements UserDetailsService {
 
 	private UserRepository userRepository;
+
 	private PasswordEncoder passwordEncoder;
 
 

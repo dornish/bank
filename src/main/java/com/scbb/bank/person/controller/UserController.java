@@ -1,9 +1,9 @@
 package com.scbb.bank.person.controller;
 
 import com.scbb.bank.interfaces.AbstractController;
+import com.scbb.bank.other.UserService;
 import com.scbb.bank.person.model.Member;
 import com.scbb.bank.person.model.User;
-import com.scbb.bank.person.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

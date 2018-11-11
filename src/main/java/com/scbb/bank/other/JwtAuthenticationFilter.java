@@ -1,6 +1,6 @@
-package com.scbb.bank.authentication.security;
+package com.scbb.bank.other;
 
-import com.scbb.bank.person.service.UserService;
+import com.scbb.bank.authentication.security.JwtTokenProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +21,9 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-	private final JwtTokenProvider tokenProvider;
+	private JwtTokenProvider tokenProvider;
 
-	private final UserService userService;
+	private UserService userService;
 
 	private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
